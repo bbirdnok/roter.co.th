@@ -1,0 +1,297 @@
+/* About Page — Archival Prestige Design
+ * Company story, team, values, and certifications
+ */
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Link } from "wouter";
+import { ArrowRight, Award, Users, Globe, Shield, CheckCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
+
+function FadeUp({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-50px" });
+  return (
+    <motion.div ref={ref} initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay, ease: "easeOut" }} className={className}>
+      {children}
+    </motion.div>
+  );
+}
+
+export default function About() {
+  const { t, language } = useLanguage();
+
+  const milestones = [
+    { year: "1998", titleEn: "Company Founded", titleTh: "ก่อตั้งบริษัท", descEn: "Roter Thailand established in Bangkok as a specialist document management consultancy.", descTh: "ก่อตั้งโรเตอร์ (ประเทศไทย) ในกรุงเทพฯ ในฐานะที่ปรึกษาการจัดการเอกสารเฉพาะทาง" },
+    { year: "2003", titleEn: "ISO Certification", titleTh: "การรับรอง ISO", descEn: "Achieved ISO 9001 certification for document management processes and quality systems.", descTh: "ได้รับการรับรอง ISO 9001 สำหรับกระบวนการจัดการเอกสารและระบบคุณภาพ" },
+    { year: "2008", titleEn: "Microfilm Division", titleTh: "แผนกไมโครฟิล์ม", descEn: "Launched specialized microfilm services division with state-of-the-art COM technology.", descTh: "เปิดตัวแผนกบริการไมโครฟิล์มเฉพาะทางด้วยเทคโนโลยี COM ล้ำสมัย" },
+    { year: "2012", titleEn: "Heritage Division", titleTh: "แผนกมรดกวัฒนธรรม", descEn: "Established dedicated heritage document conservation unit for ancient manuscripts.", descTh: "จัดตั้งหน่วยอนุรักษ์เอกสารมรดกวัฒนธรรมเฉพาะทางสำหรับต้นฉบับโบราณ" },
+    { year: "2018", titleEn: "Digital Transformation", titleTh: "การเปลี่ยนแปลงดิจิทัล", descEn: "Launched RoterDMS Enterprise platform and AI-powered OCR solutions.", descTh: "เปิดตัวแพลตฟอร์ม RoterDMS Enterprise และโซลูชัน OCR ที่ขับเคลื่อนด้วย AI" },
+    { year: "2024", titleEn: "Market Leadership", titleTh: "ผู้นำตลาด", descEn: "Recognized as Thailand's leading document management specialist with 500+ enterprise clients.", descTh: "ได้รับการยอมรับเป็นผู้เชี่ยวชาญการจัดการเอกสารชั้นนำของไทยด้วยลูกค้าองค์กรกว่า 500 ราย" },
+  ];
+
+  const values = [
+    { icon: Shield, titleEn: "Integrity", titleTh: "ความซื่อสัตย์", descEn: "We handle your most sensitive documents with absolute confidentiality and professional ethics.", descTh: "เราจัดการเอกสารที่ละเอียดอ่อนที่สุดของคุณด้วยความลับสมบูรณ์และจริยธรรมวิชาชีพ" },
+    { icon: Award, titleEn: "Excellence", titleTh: "ความเป็นเลิศ", descEn: "We pursue the highest standards in every project, from quality control to client service.", descTh: "เราแสวงหามาตรฐานสูงสุดในทุกโครงการ ตั้งแต่การควบคุมคุณภาพจนถึงการบริการลูกค้า" },
+    { icon: Users, titleEn: "Partnership", titleTh: "ความเป็นหุ้นส่วน", descEn: "We build long-term relationships with clients, becoming trusted advisors in document strategy.", descTh: "เราสร้างความสัมพันธ์ระยะยาวกับลูกค้า กลายเป็นที่ปรึกษาที่เชื่อถือได้ในกลยุทธ์เอกสาร" },
+    { icon: Globe, titleEn: "Innovation", titleTh: "นวัตกรรม", descEn: "We continuously adopt emerging technologies to deliver better outcomes for our clients.", descTh: "เราต่อเนื่องนำเทคโนโลยีใหม่มาใช้เพื่อส่งมอบผลลัพธ์ที่ดีกว่าให้กับลูกค้า" },
+  ];
+
+  const certifications = [
+    "ISO 9001:2015 Quality Management",
+    "ISO 15489 Records Management",
+    "ISO 18901 Microfilm Standards",
+    "ISO 18906 Photographic Film",
+    "ISO 11799 Document Storage",
+    "PDPA Compliance Certified",
+  ];
+
+  const teamMembers = [
+    { nameEn: "Somchai Wongkamchan", nameTh: "สมชาย วงศ์กำจัน", roleEn: "Chief Executive Officer", roleTh: "ประธานเจ้าหน้าที่บริหาร", expEn: "30+ years in document management", expTh: "ประสบการณ์ 30+ ปีด้านการจัดการเอกสาร", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80" },
+    { nameEn: "Nattaporn Sirikul", nameTh: "ณัฐพร ศิริกุล", roleEn: "Chief Technology Officer", roleTh: "ประธานเจ้าหน้าที่ฝ่ายเทคโนโลยี", expEn: "Expert in EDMS and AI solutions", expTh: "ผู้เชี่ยวชาญด้าน EDMS และโซลูชัน AI", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&q=80" },
+    { nameEn: "Prayoon Thanakit", nameTh: "ประยูร ธนกิจ", roleEn: "Head of Heritage Conservation", roleTh: "หัวหน้าฝ่ายอนุรักษ์มรดก", expEn: "Specialist in ancient manuscript preservation", expTh: "ผู้เชี่ยวชาญด้านการอนุรักษ์ต้นฉบับโบราณ", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=80" },
+    { nameEn: "Siriporn Charoenwong", nameTh: "ศิริพร เจริญวงศ์", roleEn: "Director of Client Services", roleTh: "ผู้อำนวยการฝ่ายบริการลูกค้า", expEn: "20 years in enterprise client management", expTh: "ประสบการณ์ 20 ปีด้านการจัดการลูกค้าองค์กร", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&q=80" },
+  ];
+
+  return (
+    <div className="min-h-screen">
+      {/* Hero */}
+      <section className="bg-[oklch(0.22_0.06_250)] pt-28 pb-20">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <FadeUp>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="h-px w-8 bg-[oklch(0.72_0.12_75)]" />
+                <span className="text-[oklch(0.72_0.12_75)] text-xs font-body font-semibold tracking-[0.2em] uppercase">
+                  {language === "en" ? "Our Story" : "เรื่องราวของเรา"}
+                </span>
+              </div>
+              <h1 className="font-display font-bold text-white text-4xl lg:text-5xl mb-5">
+                {t("about.title")}
+              </h1>
+              <p className="text-[oklch(0.70_0.01_250)] font-body text-lg leading-relaxed mb-6">
+                {t("about.subtitle")}
+              </p>
+              <p className="text-[oklch(0.60_0.01_250)] font-body leading-relaxed">
+                {language === "en"
+                  ? "For over 25 years, Roter (Thailand) Company Limited has been the trusted partner of Thailand's most demanding organizations — from government ministries and national banks to cultural institutions and multinational corporations. Our expertise spans the complete document lifecycle, from initial consultation through digitization, workflow automation, and long-term archival."
+                  : "กว่า 25 ปีที่ผ่านมา บริษัท โรเตอร์ (ประเทศไทย) จำกัด เป็นพันธมิตรที่เชื่อถือได้ขององค์กรที่ต้องการความเชี่ยวชาญสูงสุดในไทย ตั้งแต่กระทรวงของรัฐบาลและธนาคารแห่งชาติ ไปจนถึงสถาบันวัฒนธรรมและบริษัทข้ามชาติ ความเชี่ยวชาญของเราครอบคลุมวงจรชีวิตเอกสารทั้งหมด ตั้งแต่การให้คำปรึกษาเริ่มต้นผ่านการแปลงดิจิทัล ระบบอัตโนมัติ workflow และการจัดเก็บระยะยาว"}
+              </p>
+            </FadeUp>
+            <FadeUp delay={0.2}>
+              <div className="relative">
+                <div className="rounded-sm overflow-hidden shadow-[0_20px_60px_oklch(0.22_0.06_250/0.3)]">
+                  <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663482157235/jumThpZwKgu5mhQPgTgwan/about-office_d3b057c0.jpg"
+                    alt="Roter Thailand Office" className="w-full h-80 object-cover" />
+                </div>
+                <div className="absolute -bottom-5 -right-5 bg-[oklch(0.72_0.12_75)] p-5 rounded-sm shadow-lg">
+                  <div className="font-display font-bold text-[oklch(0.22_0.06_250)] text-3xl">25+</div>
+                  <p className="text-xs text-[oklch(0.22_0.06_250/0.8)] font-body font-semibold">
+                    {language === "en" ? "Years of Excellence" : "ปีแห่งความเป็นเลิศ"}
+                  </p>
+                </div>
+              </div>
+            </FadeUp>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="py-12 bg-white border-b border-[oklch(0.88_0.015_75)]">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
+            {[
+              { value: "500+", labelEn: "Enterprise Clients", labelTh: "ลูกค้าองค์กร" },
+              { value: "50M+", labelEn: "Documents Processed", labelTh: "เอกสารที่ดำเนินการ" },
+              { value: "150+", labelEn: "Specialists", labelTh: "ผู้เชี่ยวชาญ" },
+              { value: "6", labelEn: "ISO Certifications", labelTh: "การรับรอง ISO" },
+            ].map((stat, i) => (
+              <FadeUp key={stat.value} delay={i * 0.1} className="text-center">
+                <div className="font-display font-bold text-[oklch(0.22_0.06_250)] text-3xl lg:text-4xl mb-1">{stat.value}</div>
+                <p className="text-sm text-[oklch(0.52_0.02_250)] font-body">{language === "en" ? stat.labelEn : stat.labelTh}</p>
+              </FadeUp>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Values */}
+      <section className="py-16 bg-[oklch(0.97_0.008_75)]">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeUp>
+            <div className="text-center mb-12">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <div className="h-px w-8 bg-[oklch(0.72_0.12_75)]" />
+                <span className="text-[oklch(0.72_0.12_75)] text-xs font-body font-semibold tracking-[0.2em] uppercase">
+                  {language === "en" ? "Our Values" : "ค่านิยมของเรา"}
+                </span>
+                <div className="h-px w-8 bg-[oklch(0.72_0.12_75)]" />
+              </div>
+              <h2 className="font-display font-bold text-[oklch(0.22_0.06_250)] text-2xl lg:text-3xl">
+                {language === "en" ? "What Drives Us" : "สิ่งที่ขับเคลื่อนเรา"}
+              </h2>
+            </div>
+          </FadeUp>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((val, i) => (
+              <FadeUp key={val.titleEn} delay={i * 0.1}>
+                <div className="bg-white p-6 border border-[oklch(0.88_0.015_75)] rounded-sm hover:border-[oklch(0.72_0.12_75/0.4)] transition-colors">
+                  <div className="w-12 h-12 rounded-sm bg-[oklch(0.22_0.06_250/0.06)] flex items-center justify-center mb-4">
+                    <val.icon size={22} className="text-[oklch(0.22_0.06_250)]" />
+                  </div>
+                  <h3 className="font-display font-semibold text-[oklch(0.22_0.06_250)] text-base mb-2">
+                    {language === "en" ? val.titleEn : val.titleTh}
+                  </h3>
+                  <p className="text-sm text-[oklch(0.52_0.02_250)] font-body leading-relaxed">
+                    {language === "en" ? val.descEn : val.descTh}
+                  </p>
+                </div>
+              </FadeUp>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Timeline */}
+      <section className="py-16 bg-white">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeUp>
+            <div className="text-center mb-12">
+              <h2 className="font-display font-bold text-[oklch(0.22_0.06_250)] text-2xl lg:text-3xl">
+                {language === "en" ? "Our Journey" : "เส้นทางของเรา"}
+              </h2>
+            </div>
+          </FadeUp>
+          <div className="relative">
+            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-[oklch(0.88_0.015_75)] hidden lg:block" />
+            <div className="space-y-8">
+              {milestones.map((m, i) => (
+                <FadeUp key={m.year} delay={i * 0.1}>
+                  <div className={`flex gap-8 items-start ${i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"}`}>
+                    <div className={`flex-1 ${i % 2 === 0 ? "lg:text-right" : ""}`}>
+                      <div className={`bg-[oklch(0.97_0.008_75)] border border-[oklch(0.88_0.015_75)] rounded-sm p-5 ${i % 2 === 0 ? "lg:ml-auto" : ""} max-w-sm`}>
+                        <div className="font-display font-bold text-[oklch(0.72_0.12_75)] text-xl mb-1">{m.year}</div>
+                        <h3 className="font-display font-semibold text-[oklch(0.22_0.06_250)] text-base mb-1">
+                          {language === "en" ? m.titleEn : m.titleTh}
+                        </h3>
+                        <p className="text-sm text-[oklch(0.52_0.02_250)] font-body leading-relaxed">
+                          {language === "en" ? m.descEn : m.descTh}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="hidden lg:flex w-4 h-4 rounded-full bg-[oklch(0.72_0.12_75)] border-4 border-white shadow-sm mt-5 shrink-0 z-10" />
+                    <div className="flex-1 hidden lg:block" />
+                  </div>
+                </FadeUp>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Team */}
+      <section className="py-16 bg-[oklch(0.97_0.008_75)]">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeUp>
+            <div className="text-center mb-12">
+              <h2 className="font-display font-bold text-[oklch(0.22_0.06_250)] text-2xl lg:text-3xl">
+                {language === "en" ? "Leadership Team" : "ทีมผู้นำ"}
+              </h2>
+            </div>
+          </FadeUp>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {teamMembers.map((member, i) => (
+              <FadeUp key={member.nameEn} delay={i * 0.1}>
+                <div className="bg-white border border-[oklch(0.88_0.015_75)] rounded-sm overflow-hidden hover:border-[oklch(0.72_0.12_75/0.4)] transition-colors">
+                  <div className="h-56 overflow-hidden">
+                    <img src={member.image} alt={language === "en" ? member.nameEn : member.nameTh}
+                      className="w-full h-full object-cover object-top" />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-display font-semibold text-[oklch(0.22_0.06_250)] text-sm mb-0.5">
+                      {language === "en" ? member.nameEn : member.nameTh}
+                    </h3>
+                    <p className="text-xs text-[oklch(0.72_0.12_75)] font-body font-semibold mb-1">
+                      {language === "en" ? member.roleEn : member.roleTh}
+                    </p>
+                    <p className="text-xs text-[oklch(0.52_0.02_250)] font-body">
+                      {language === "en" ? member.expEn : member.expTh}
+                    </p>
+                  </div>
+                </div>
+              </FadeUp>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Certifications */}
+      <section className="py-16 bg-white">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeUp>
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="h-px w-8 bg-[oklch(0.72_0.12_75)]" />
+                  <span className="text-[oklch(0.72_0.12_75)] text-xs font-body font-semibold tracking-[0.2em] uppercase">
+                    {language === "en" ? "Certifications" : "การรับรอง"}
+                  </span>
+                </div>
+                <h2 className="font-display font-bold text-[oklch(0.22_0.06_250)] text-2xl lg:text-3xl mb-4">
+                  {language === "en" ? "Internationally Certified" : "ได้รับการรับรองระดับสากล"}
+                </h2>
+                <p className="text-[oklch(0.52_0.02_250)] font-body leading-relaxed mb-6">
+                  {language === "en"
+                    ? "Our processes and quality management systems are certified to the highest international standards, ensuring your documents receive the best possible care."
+                    : "กระบวนการและระบบการจัดการคุณภาพของเราได้รับการรับรองตามมาตรฐานสากลสูงสุด เพื่อให้มั่นใจว่าเอกสารของคุณได้รับการดูแลที่ดีที่สุด"}
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  {certifications.map((cert) => (
+                    <div key={cert} className="flex items-center gap-2">
+                      <CheckCircle size={14} className="text-[oklch(0.72_0.12_75)] shrink-0" />
+                      <span className="text-sm font-body text-[oklch(0.38_0.005_250)]">{cert}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                {certifications.map((cert, i) => (
+                  <div key={cert} className="aspect-square bg-[oklch(0.22_0.06_250/0.04)] border border-[oklch(0.88_0.015_75)] rounded-sm flex items-center justify-center p-3">
+                    <div className="text-center">
+                      <Award size={24} className="text-[oklch(0.72_0.12_75)] mx-auto mb-1" />
+                      <p className="text-[9px] font-body font-semibold text-[oklch(0.38_0.005_250)] leading-tight text-center">
+                        {cert.split(" ").slice(0, 2).join(" ")}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-16 bg-[oklch(0.22_0.06_250)]">
+        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <FadeUp>
+            <h2 className="font-display font-bold text-white text-2xl lg:text-3xl mb-4">
+              {language === "en" ? "Partner With Thailand's Document Specialists" : "เป็นพันธมิตรกับผู้เชี่ยวชาญเอกสารของไทย"}
+            </h2>
+            <p className="text-[oklch(0.70_0.01_250)] font-body mb-6 max-w-lg mx-auto">
+              {language === "en"
+                ? "Discover how our 25+ years of expertise can transform your document operations."
+                : "ค้นพบว่าความเชี่ยวชาญกว่า 25 ปีของเราสามารถเปลี่ยนแปลงการดำเนินงานเอกสารของคุณได้อย่างไร"}
+            </p>
+            <Link href="/contact">
+              <Button className="bg-[oklch(0.72_0.12_75)] text-[oklch(0.22_0.06_250)] hover:bg-[oklch(0.82_0.09_75)] font-body font-semibold px-8">
+                {t("nav.getConsultation")} <ArrowRight size={16} className="ml-2" />
+              </Button>
+            </Link>
+          </FadeUp>
+        </div>
+      </section>
+    </div>
+  );
+}
