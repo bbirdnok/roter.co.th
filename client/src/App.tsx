@@ -14,8 +14,9 @@ import CaseStudies from "./pages/CaseStudies";
 import Insights from "./pages/Insights";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-
+import AdminLeads from "./pages/AdminLeads";
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
     <div className="flex flex-col min-h-screen">
       <Navigation />
@@ -28,6 +29,7 @@ function Router() {
           <Route path="/insights" component={Insights} />
           <Route path="/about" component={About} />
           <Route path="/contact" component={Contact} />
+          <Route path="/admin/leads" component={AdminLeads} />
           <Route path="/404" component={NotFound} />
           <Route component={NotFound} />
         </Switch>

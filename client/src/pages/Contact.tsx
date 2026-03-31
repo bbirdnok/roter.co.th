@@ -3,10 +3,11 @@
  */
 import { useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { CheckCircle, MapPin, Phone, Mail, Clock, ArrowRight, ArrowLeft, Building, Users, FileText, Briefcase } from "lucide-react";
+import { CheckCircle, MapPin, Phone, Mail, Clock, ArrowRight, ArrowLeft, Building, Users, FileText, Briefcase, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
+import { trpc } from "@/lib/trpc";
 
 function FadeUp({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -50,16 +51,41 @@ export default function Contact() {
 
   const totalSteps = 3;
 
+  const [isLoading, setIsLoading] = useState(false);
+  const submitLeadMutation = trpc.leads.submit.useMutation();
+
   const update = (field: keyof FormData, value: string) =>
     setForm((prev) => ({ ...prev, [field]: value }));
 
-  const handleSubmit = () => {
-    if (!form.name || !form.email) {
+  const handleSubmit = async () => {
+    if (!form.name || !form.email || !form.orgName) {
       toast.error(language === "en" ? "Please fill in required fields" : "กรุณากรอกข้อมูลที่จำเป็น");
       return;
     }
-    setSubmitted(true);
-    toast.success(language === "en" ? "Thank you! We'll contact you within 24 hours." : "ขอบคุณ! เราจะติดต่อคุณภายใน 24 ชั่วโมง");
+
+    setIsLoading(true);
+    try {
+      await submitLeadMutation.mutateAsync({
+        organizationType: form.orgType,
+        organizationName: form.orgName,
+        organizationSize: form.orgSize,
+        fullName: form.name,
+        email: form.email,
+        phone: form.phone || undefined,
+        serviceInterest: form.primaryNeed || undefined,
+        message: form.message || undefined,
+      });
+      
+      setSubmitted(true);
+      toast.success(language === "en" ? "Thank you! We'll contact you within 24 hours." : "ขอบคุณ! เราจะติดต่อคุณภายใน 24 ชั่วโมง");
+      setForm(initialForm);
+      setStep(1);
+    } catch (error) {
+      console.error("[Contact] Form submission error:", error);
+      toast.error(language === "en" ? "Failed to submit form. Please try again." : "ส่งแบบฟอร์มล้มเหลว กรุณาลองใหม่");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const orgTypes = [
@@ -399,9 +425,9 @@ export default function Contact() {
                           {language === "en" ? "Continue" : "ดำเนินการต่อ"} <ArrowRight size={14} className="ml-2" />
                         </Button>
                       ) : (
-                        <Button onClick={handleSubmit}
-                          className="bg-[oklch(0.72_0.12_75)] text-[oklch(0.22_0.06_250)] hover:bg-[oklch(0.82_0.09_75)] font-body font-semibold text-sm">
-                          {language === "en" ? "Submit Request" : "ส่งคำขอ"} <ArrowRight size={14} className="ml-2" />
+                        <Button onClick={handleSubmit} disabled={isLoading}
+                          className="bg-[oklch(0.72_0.12_75)] text-[oklch(0.22_0.06_250)] hover:bg-[oklch(0.82_0.09_75)] disabled:opacity-50 disabled:cursor-not-allowed font-body font-semibold text-sm">
+                          {isLoading ? <><Loader2 size={14} className="animate-spin mr-2" />Submitting...</> : <>{language === "en" ? "Submit Request" : "ส่งคำขอ"} <ArrowRight size={14} className="ml-2" /></>}
                         </Button>
                       )}
                     </div>

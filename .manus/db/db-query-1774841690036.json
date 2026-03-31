@@ -1,0 +1,38 @@
+{
+  "query": "SELECT * FROM leads ORDER BY createdAt DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway05.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2PpxXSAndhYVpAR.root --database jumThpZwKgu5mhQPgTgwan --execute SELECT * FROM leads ORDER BY createdAt DESC LIMIT 5;",
+  "rows": [
+    {
+      "id": "2",
+      "organizationType": "government",
+      "organizationName": "Test Agency",
+      "organizationSize": "<100",
+      "fullName": "Jane Smith",
+      "email": "jane@example.com",
+      "phone": "+9876543210",
+      "serviceInterest": "microfilm",
+      "message": "NULL",
+      "status": "new",
+      "createdAt": "2026-03-28 04:13:54",
+      "updatedAt": "2026-03-28 04:13:54"
+    },
+    {
+      "id": "1",
+      "organizationType": "enterprise",
+      "organizationName": "Test Corp",
+      "organizationSize": "500-5000",
+      "fullName": "John Doe",
+      "email": "john@example.com",
+      "phone": "+1234567890",
+      "serviceInterest": "scanning",
+      "message": "We need document scanning services",
+      "status": "contacted",
+      "createdAt": "2026-03-28 04:13:52",
+      "updatedAt": "2026-03-28 04:13:56"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\torganizationType\torganizationName\torganizationSize\tfullName\temail\tphone\tserviceInterest\tmessage\tstatus\tcreatedAt\tupdatedAt\n2\tgovernment\tTest Agency\t<100\tJane Smith\tjane@example.com\t+9876543210\tmicrofilm\tNULL\tnew\t2026-03-28 04:13:54\t2026-03-28 04:13:54\n1\tenterprise\tTest Corp\t500-5000\tJohn Doe\tjohn@example.com\t+1234567890\tscanning\tWe need document scanning services\tcontacted\t2026-03-28 04:13:52\t2026-03-28 04:13:56\n",
+  "stderr": "",
+  "execution_time_ms": 2417
+}
