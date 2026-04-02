@@ -46,19 +46,13 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16 lg:h-18">
           {/* Logo */}
           <Link href="/">
-            <div className="flex items-center gap-3 group">
-              {/* Monogram */}
-              <div className="w-9 h-9 rounded-sm flex items-center justify-center border border-[oklch(0.72_0.12_75/0.6)] bg-[oklch(0.72_0.12_75/0.1)] group-hover:bg-[oklch(0.72_0.12_75/0.2)] transition-colors">
-                <span className="font-display font-bold text-[oklch(0.72_0.12_75)] text-lg leading-none">R</span>
-              </div>
-              <div className="hidden sm:block">
-                <div className="font-display font-semibold text-white text-sm leading-tight tracking-wide">
-                  ROTER
-                </div>
-                <div className="text-[oklch(0.72_0.12_75)] text-[10px] font-body tracking-[0.15em] uppercase leading-tight">
-                  {language === "en" ? "Thailand" : "ประเทศไทย"}
-                </div>
-              </div>
+            <div className="flex items-center gap-2 group">
+              {/* Company Logo */}
+              <img
+                src="https://d2xsxph8kpxj0f.cloudfront.net/310519663482157235/jumThpZwKgu5mhQPgTgwan/roter-logo_b254d187.png"
+                alt="Roter Thailand Logo"
+                className="h-10 w-auto object-contain group-hover:opacity-80 transition-opacity"
+              />
             </div>
           </Link>
 

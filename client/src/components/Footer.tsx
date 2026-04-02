@@ -36,16 +36,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 rounded-sm flex items-center justify-center border border-[oklch(0.72_0.12_75/0.5)] bg-[oklch(0.72_0.12_75/0.1)]">
-                <span className="font-display font-bold text-[oklch(0.72_0.12_75)] text-xl leading-none">R</span>
-              </div>
-              <div>
-                <div className="font-display font-semibold text-white text-base leading-tight">ROTER</div>
-                <div className="text-[oklch(0.72_0.12_75)] text-[10px] font-body tracking-[0.15em] uppercase">
-                  {language === "en" ? "Thailand" : "ประเทศไทย"}
-                </div>
-              </div>
+            <div className="mb-5">
+              <img
+                src="https://d2xsxph8kpxj0f.cloudfront.net/310519663482157235/jumThpZwKgu5mhQPgTgwan/roter-logo_b254d187.png"
+                alt="Roter Thailand Logo"
+                className="h-12 w-auto object-contain"
+              />
             </div>
             <p className="text-sm leading-relaxed text-[oklch(0.65_0.01_250)] mb-6">
               {t("footer.tagline")}
