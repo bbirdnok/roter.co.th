@@ -15,6 +15,7 @@ import Insights from "./pages/Insights";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import AdminLeads from "./pages/AdminLeads";
+import ServiceDetail from "./pages/ServiceDetail";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
@@ -23,6 +24,7 @@ function Router() {
       <main className="flex-1">
         <Switch>
           <Route path="/" component={Home} />
+          <Route path="/services/:slug" component={ServiceDetail} />
           <Route path="/services" component={Services} />
           <Route path="/products" component={Products} />
           <Route path="/case-studies" component={CaseStudies} />

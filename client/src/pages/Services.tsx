@@ -54,11 +54,18 @@ function ServiceDetail({ id, icon: Icon, title, subtitle, description, features,
             </li>
           ))}
         </ul>
-        <Link href="/contact">
-          <Button className="bg-[oklch(0.22_0.06_250)] text-white hover:bg-[oklch(0.28_0.07_250)] font-body font-medium text-sm">
-            Request This Service <ArrowRight size={14} className="ml-2" />
-          </Button>
-        </Link>
+        <div className="flex gap-3">
+          <Link href={`/services/${id}`}>
+            <Button className="bg-[oklch(0.72_0.12_75)] text-[oklch(0.22_0.06_250)] hover:bg-[oklch(0.72_0.12_75/0.9)] font-body font-medium text-sm">
+              Learn More <ArrowRight size={14} className="ml-2" />
+            </Button>
+          </Link>
+          <Link href="/contact">
+            <Button className="bg-[oklch(0.22_0.06_250)] text-white hover:bg-[oklch(0.28_0.07_250)] font-body font-medium text-sm">
+              Request This Service <ArrowRight size={14} className="ml-2" />
+            </Button>
+          </Link>
+        </div>
       </FadeUp>
       <FadeUp delay={0.15} className={reverse ? "lg:col-start-1 lg:row-start-1" : ""}>
         <div className="relative rounded-sm overflow-hidden aspect-[4/3] shadow-[0_20px_60px_oklch(0.22_0.06_250/0.15)]">
