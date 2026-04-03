@@ -86,9 +86,9 @@ export default function About() {
                     alt="Roter Thailand Office" className="w-full h-80 object-cover" />
                 </div>
                 <div className="absolute -bottom-5 -right-5 bg-[oklch(0.72_0.12_75)] p-5 rounded-sm shadow-lg">
-                  <div className="font-display font-bold text-[oklch(0.22_0.06_250)] text-3xl">25+</div>
+                  <div className="font-display font-bold text-[oklch(0.22_0.06_250)] text-3xl">30+</div>
                   <p className="text-xs text-[oklch(0.22_0.06_250/0.8)] font-body font-semibold">
-                    {language === "en" ? "Years of Excellence" : "ปีแห่งความเป็นเลิศ"}
+                    {language === "en" ? "Years of Expertise" : "ปีแห่งความชำนาญ"}
                   </p>
                 </div>
               </div>

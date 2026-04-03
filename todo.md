@@ -51,6 +51,14 @@
 - [x] Replace Footer logo monogram with company logo
 - [x] Test logo display on all pages
 
+## Phase 5: Company Information Update (Completed)
+- [x] Update Contact page with correct address (848-849 Sinthorn Village, Womintr Road, Khlong Chan, Bangkapi, Bangkok 10240)
+- [x] Update phone numbers (+66 2 375 3455-6, +66 2 733 3449-50)
+- [x] Update email (roter@roter.co.th)
+- [x] Update Footer with company details
+- [x] Update About page with 30+ years of expertise (from 25+)
+- [x] Verify all information displays correctly on all pages
+
 ## Future Enhancements (Optional)
 - [ ] Export leads to CSV in Admin Dashboard
 - [ ] Email confirmation to customers after form submission

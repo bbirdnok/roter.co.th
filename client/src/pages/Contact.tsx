@@ -177,22 +177,22 @@ export default function Contact() {
                         icon: MapPin,
                         labelEn: "Head Office",
                         labelTh: "สำนักงานใหญ่",
-                        valueEn: "123 Silom Road, Bangrak, Bangkok 10500",
-                        valueTh: "123 ถนนสีลม แขวงบางรัก กรุงเทพฯ 10500",
+                        valueEn: "848-849 Sinthorn Village, Womintr Road, Khlong Chan, Bangkapi, Bangkok 10240",
+                        valueTh: "848-849 หมู่บ้านสินธร ถนนวมินทร์ แขวงคลองจั่น เขตบางกะปิ กทม. 10240",
                       },
                       {
                         icon: Phone,
                         labelEn: "Phone",
                         labelTh: "โทรศัพท์",
-                        valueEn: "+66 2 234 5678",
-                        valueTh: "+66 2 234 5678",
+                        valueEn: "+66 2 375 3455-6, +66 2 733 3449-50",
+                        valueTh: "+66 2 375 3455-6, +66 2 733 3449-50",
                       },
                       {
                         icon: Mail,
                         labelEn: "Email",
                         labelTh: "อีเมล",
-                        valueEn: "info@roter-thailand.com",
-                        valueTh: "info@roter-thailand.com",
+                        valueEn: "roter@roter.co.th",
+                        valueTh: "roter@roter.co.th",
                       },
                       {
                         icon: Clock,
@@ -228,8 +228,8 @@ export default function Contact() {
                       ? "For urgent document recovery or disaster response, our emergency team is available 24/7."
                       : "สำหรับการกู้คืนเอกสารเร่งด่วนหรือการตอบสนองภัยพิบัติ ทีมฉุกเฉินของเราพร้อมให้บริการตลอด 24/7"}
                   </p>
-                  <a href="tel:+6622345679" className="text-[oklch(0.72_0.12_75)] font-body font-semibold text-sm flex items-center gap-1">
-                    <Phone size={13} /> +66 2 234 5679
+                  <a href="tel:+66237534556" className="text-[oklch(0.72_0.12_75)] font-body font-semibold text-sm flex items-center gap-1">
+                    <Phone size={13} /> +66 2 375 3455-6
                   </a>
                 </div>
               </div>
