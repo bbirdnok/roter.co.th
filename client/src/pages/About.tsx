@@ -28,7 +28,7 @@ export default function About() {
     { year: "2000s", titleEn: "Technology & Services Expansion", titleTh: "ขยายเทคโนโลยีและบริการ", descEn: "Introduced advanced scanning technology, microfilm services, and electronic document management systems (EDMS) to serve growing enterprise demand.", descTh: "นำเสนอเทคโนโลยีสแกนขั้นสูง บริการไมโครฟิล์ม และระบบจัดการเอกสารอิเล็กทรอนิกส์ (EDMS) เพื่อตอบสนองความต้องการขององค์กรที่เพิ่มขึ้น" },
     { year: "2010s", titleEn: "Heritage & Preservation", titleTh: "มรดกและการอนุรักษ์", descEn: "Established specialized ancient document preservation and conservation services, including vacuum fumigation and restoration capabilities.", descTh: "จัดตั้งบริการอนุรักษ์และการอนุรักษ์เอกสารโบราณเฉพาะทาง รวมถึงความสามารถในการบำบัดด้วยสูญญากาศและการบูรณะ" },
     { year: "2020s", titleEn: "Digital Innovation", titleTh: "นวัตกรรมดิจิทัล", descEn: "Integrated advanced OCR, AI-powered document classification, and cloud-based document hosting solutions for modern enterprises.", descTh: "บูรณาการ OCR ขั้นสูง การจำแนกเอกสารด้วย AI และโซลูชันการจัดเก็บเอกสารบนคลาวด์สำหรับองค์กรสมัยใหม่" },
-    { year: "Today", titleEn: "Market Leadership", titleTh: "ผู้นำตลาด", descEn: "Recognized as Thailand's leading document management specialist serving 500+ enterprise clients across all sectors with comprehensive, integrated solutions.", descTh: "ได้รับการยอมรับเป็นผู้เชี่ยวชาญการจัดการเอกสารชั้นนำของไทย บริการลูกค้าองค์กรกว่า 500 ราย ในทุกภาคส่วนด้วยโซลูชันที่ครอบคลุมและบูรณาการ" },
+    { year: "Today", titleEn: "Market Leadership", titleTh: "ผู้นำตลาด", descEn: "Recognized as Thailand's leading document management specialist serving 100+ enterprise clients across all sectors with comprehensive, integrated solutions.", descTh: "ได้รับการยอมรับเป็นผู้เชี่ยวชาญการจัดการเอกสารชั้นนำของไทย บริการลูกค้าองค์กรกว่า 100 ราย ในทุกภาคส่วนด้วยโซลูชันที่ครอบคลุมและบูรณาการ" },
   ];
 
   const values = [
@@ -48,7 +48,7 @@ export default function About() {
   ];
 
   const teamMembers = [
-    { nameEn: "Somchai Wongkamchan", nameTh: "สมชาย วงศ์กำจัน", roleEn: "Chief Executive Officer", roleTh: "ประธานเจ้าหน้าที่บริหาร", expEn: "30+ years in document management", expTh: "ประสบการณ์ 30+ ปีด้านการจัดการเอกสาร", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80" },
+    { nameEn: "Somchai Wongkamchan", nameTh: "สมชาย วงศ์กำจัน", roleEn: "Chief Executive Officer", roleTh: "ประธานเจ้าหน้าที่บริหาร", expEn: "35+ years in document management", expTh: "ประสบการณ์ 35+ ปีด้านการจัดการเอกสาร", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80" },
     { nameEn: "Nattaporn Sirikul", nameTh: "ณัฐพร ศิริกุล", roleEn: "Chief Technology Officer", roleTh: "ประธานเจ้าหน้าที่ฝ่ายเทคโนโลยี", expEn: "Expert in EDMS and AI solutions", expTh: "ผู้เชี่ยวชาญด้าน EDMS และโซลูชัน AI", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&q=80" },
     { nameEn: "Prayoon Thanakit", nameTh: "ประยูร ธนกิจ", roleEn: "Head of Heritage Conservation", roleTh: "หัวหน้าฝ่ายอนุรักษ์มรดก", expEn: "Specialist in ancient manuscript preservation", expTh: "ผู้เชี่ยวชาญด้านการอนุรักษ์ต้นฉบับโบราณ", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=80" },
     { nameEn: "Siriporn Charoenwong", nameTh: "ศิริพร เจริญวงศ์", roleEn: "Director of Client Services", roleTh: "ผู้อำนวยการฝ่ายบริการลูกค้า", expEn: "20 years in enterprise client management", expTh: "ประสบการณ์ 20 ปีด้านการจัดการลูกค้าองค์กร", image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&q=80" },
@@ -86,7 +86,7 @@ export default function About() {
                     alt="Roter Thailand Office" className="w-full h-80 object-cover" />
                 </div>
                 <div className="absolute -bottom-5 -right-5 bg-[oklch(0.72_0.12_75)] p-5 rounded-sm shadow-lg">
-                  <div className="font-display font-bold text-[oklch(0.22_0.06_250)] text-3xl">30+</div>
+                  <div className="font-display font-bold text-[oklch(0.22_0.06_250)] text-3xl">35+</div>
                   <p className="text-xs text-[oklch(0.22_0.06_250/0.8)] font-body font-semibold">
                     {language === "en" ? "Years of Expertise" : "ปีแห่งความชำนาญ"}
                   </p>
@@ -102,7 +102,7 @@ export default function About() {
         <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
             {[
-              { value: "500+", labelEn: "Enterprise Clients", labelTh: "ลูกค้าองค์กร" },
+              { value: "100+", labelEn: "Enterprise Clients", labelTh: "ลูกค้าองค์กร" },
               { value: "50M+", labelEn: "Documents Processed", labelTh: "เอกสารที่ดำเนินการ" },
               { value: "150+", labelEn: "Specialists", labelTh: "ผู้เชี่ยวชาญ" },
               { value: "6", labelEn: "ISO Certifications", labelTh: "การรับรอง ISO" },

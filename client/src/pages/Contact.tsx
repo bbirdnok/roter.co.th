@@ -184,8 +184,8 @@ export default function Contact() {
                         icon: Phone,
                         labelEn: "Phone",
                         labelTh: "โทรศัพท์",
-                        valueEn: "+66 2 375 3455-6, +66 2 733 3449-50",
-                        valueTh: "+66 2 375 3455-6, +66 2 733 3449-50",
+                        valueEn: "+66 2 375 3455-6",
+                        valueTh: "+66 2 375 3455-6",
                       },
                       {
                         icon: Mail,

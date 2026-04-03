@@ -57,7 +57,7 @@ export default function Footer() {
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone size={14} className="text-[oklch(0.72_0.12_75)] shrink-0" />
-                <span className="text-[oklch(0.65_0.01_250)]">+66 2 375 3455-6, +66 2 733 3449-50</span>
+                <span className="text-[oklch(0.65_0.01_250)]">+66 2 375 3455-6</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail size={14} className="text-[oklch(0.72_0.12_75)] shrink-0" />
