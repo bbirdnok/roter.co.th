@@ -90,3 +90,4 @@
 - [x] Remove phone number 0 2733 3449-50 from Contact page and Footer
 - [x] Reduce client count from 500+ to 100+ in About page
 - [x] Update years of expertise from 30+ to 35+ in About page
+- [x] Update Home page stats: 100+ clients, 35+ years (verified displaying correctly)

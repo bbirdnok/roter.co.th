@@ -251,9 +251,9 @@ export default function Home() {
   const { t, language } = useLanguage();
 
   const stats = [
-    { value: 500, suffix: "+", label: t("hero.stat.clients") },
+    { value: 100, suffix: "+", label: t("hero.stat.clients") },
     { value: 50, suffix: "M+", label: t("hero.stat.documents") },
-    { value: 25, suffix: "+", label: t("hero.stat.years") },
+    { value: 35, suffix: "+", label: t("hero.stat.years") },
     { value: 98, suffix: "%", label: t("hero.stat.satisfaction") },
   ];
 
