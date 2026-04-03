@@ -52,7 +52,7 @@
 - [x] Test logo display on all pages
 
 ## Phase 5: Company Information Update (Completed)
-- [x] Update Contact page with correct address (848-849 Sinthorn Village, Womintr Road, Khlong Chan, Bangkapi, Bangkok 10240)
+- [x] Update Contact page with correct address (848-849 Sinthorn Village, Nawamin Road, Khlong Chan, Bangkapi, Bangkok 10240)
 - [x] Update phone numbers (+66 2 375 3455-6, +66 2 733 3449-50)
 - [x] Update email (roter@roter.co.th)
 - [x] Update Footer with company details
@@ -70,3 +70,8 @@
 - [ ] Payment processing for service bookings
 - [ ] Service booking/appointment system
 - [ ] Document upload portal for customers
+
+## Phase 6: Street Name Correction (Completed)
+- [x] Replace "Womintr Road" with "Nawamin Road" in Contact page
+- [x] Replace "Womintr Road" with "Nawamin Road" in Footer component
+- [x] Verify all pages display correct street name

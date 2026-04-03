@@ -51,7 +51,7 @@ export default function Footer() {
                 <MapPin size={14} className="text-[oklch(0.72_0.12_75)] mt-0.5 shrink-0" />
                 <span className="text-[oklch(0.65_0.01_250)]">
                   {language === "en"
-                    ? "848-849 Sinthorn Village, Womintr Road, Khlong Chan, Bangkapi, Bangkok 10240"
+                    ? "848-849 Sinthorn Village, Nawamin Road, Khlong Chan, Bangkapi, Bangkok 10240"
                     : "848-849 หมู่บ้านสินธร ถนนวมินทร์ แขวงคลองจั่น เขตบางกะปิ กทม. 10240"}
                 </span>
               </div>

@@ -177,7 +177,7 @@ export default function Contact() {
                         icon: MapPin,
                         labelEn: "Head Office",
                         labelTh: "สำนักงานใหญ่",
-                        valueEn: "848-849 Sinthorn Village, Womintr Road, Khlong Chan, Bangkapi, Bangkok 10240",
+                        valueEn: "848-849 Sinthorn Village, Nawamin Road, Khlong Chan, Bangkapi, Bangkok 10240",
                         valueTh: "848-849 หมู่บ้านสินธร ถนนวมินทร์ แขวงคลองจั่น เขตบางกะปิ กทม. 10240",
                       },
                       {
