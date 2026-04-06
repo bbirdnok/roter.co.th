@@ -521,7 +521,7 @@ export default function Home() {
                   </h3>
                 </div>
                 <p className="text-xs text-[oklch(0.60_0.01_250)] mb-4 font-body">
-                  {language === "en" ? "Average across 500+ enterprise clients" : "ค่าเฉลี่ยจากลูกค้าองค์กรกว่า 500 ราย"}
+                  {language === "en" ? "Average across 100+ enterprise clients" : "ค่าเฉลี่ยจากลูกค้าองค์กรกว่า 100 ราย"}
                 </p>
                 <ResponsiveContainer width="100%" height={200}>
                   <AreaChart data={efficiencyData}>
@@ -589,66 +589,6 @@ export default function Home() {
                   <div className="font-display font-bold text-white text-2xl mb-1">{kpi.value}</div>
                   <p className="text-xs text-[oklch(0.60_0.01_250)] font-body leading-tight">{kpi.label}</p>
                 </div>
-              </FadeUp>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CASE STUDIES PREVIEW ──────────────────────────────────────────── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeUp>
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-px w-8 bg-[oklch(0.72_0.12_75)]" />
-                  <span className="text-[oklch(0.72_0.12_75)] text-xs font-body font-semibold tracking-[0.2em] uppercase">
-                    {language === "en" ? "Case Studies" : "กรณีศึกษา"}
-                  </span>
-                </div>
-                <h2 className="font-display font-bold text-[oklch(0.22_0.06_250)] text-3xl lg:text-4xl">
-                  {t("caseStudies.title")}
-                </h2>
-              </div>
-              <Link href="/case-studies">
-                <Button variant="outline" className="border-[oklch(0.22_0.06_250)] text-[oklch(0.22_0.06_250)] hover:bg-[oklch(0.22_0.06_250)] hover:text-white font-body shrink-0">
-                  {language === "en" ? "View All" : "ดูทั้งหมด"}
-                  <ChevronRight size={16} className="ml-1" />
-                </Button>
-              </Link>
-            </div>
-          </FadeUp>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {caseStudies.map((cs, i) => (
-              <FadeUp key={cs.title} delay={i * 0.1}>
-                <Link href="/case-studies">
-                  <div className="group border border-[oklch(0.88_0.015_75)] rounded-sm overflow-hidden hover:border-[oklch(0.72_0.12_75/0.4)] hover:shadow-[0_8px_40px_oklch(0.22_0.06_250/0.08)] transition-all duration-300 cursor-pointer">
-                    <div className="relative h-48 overflow-hidden">
-                      <img
-                        src={cs.image}
-                        alt={cs.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute top-3 left-3">
-                        <span className="bg-[oklch(0.22_0.06_250/0.85)] text-[oklch(0.72_0.12_75)] text-[10px] font-body font-semibold tracking-widest uppercase px-2.5 py-1 rounded-sm">
-                          {cs.industry}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-5">
-                      <p className="text-xs text-[oklch(0.52_0.02_250)] font-body mb-2">{cs.client}</p>
-                      <h3 className="font-display font-semibold text-[oklch(0.22_0.06_250)] text-base leading-snug mb-3">
-                        {cs.title}
-                      </h3>
-                      <div className="flex items-center gap-2">
-                        <CheckCircle size={14} className="text-[oklch(0.72_0.12_75)] shrink-0" />
-                        <span className="text-sm font-body font-semibold text-[oklch(0.60_0.14_75)]">{cs.result}</span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
               </FadeUp>
             ))}
           </div>
