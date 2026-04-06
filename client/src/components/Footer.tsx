@@ -20,7 +20,6 @@ export default function Footer() {
 
   const company = [
     { label: t("nav.about"), href: "/about" },
-    { label: t("nav.caseStudies"), href: "/case-studies" },
     { label: t("nav.insights"), href: "/insights" },
     { label: t("nav.products"), href: "/products" },
     { label: t("nav.contact"), href: "/contact" },

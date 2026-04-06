@@ -10,7 +10,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Services from "./pages/Services";
 import Products from "./pages/Products";
-import CaseStudies from "./pages/CaseStudies";
+
 import Insights from "./pages/Insights";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -27,7 +27,7 @@ function Router() {
           <Route path="/services/:slug" component={ServiceDetail} />
           <Route path="/services" component={Services} />
           <Route path="/products" component={Products} />
-          <Route path="/case-studies" component={CaseStudies} />
+
           <Route path="/insights" component={Insights} />
           <Route path="/about" component={About} />
           <Route path="/contact" component={Contact} />
