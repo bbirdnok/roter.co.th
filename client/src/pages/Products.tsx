@@ -70,7 +70,7 @@ const products = [
     nameTh: "COM Writer Pro",
     descEn: "Computer Output Microfilm (COM) recorder for converting digital files to archival-grade microfilm at 1800 DPI.",
     descTh: "เครื่องบันทึก COM สำหรับแปลงไฟล์ดิจิทัลเป็นไมโครฟิล์มระดับหอจดหมายเหตุที่ 1800 DPI",
-    specs: ["1800 DPI output", "16mm & 35mm", "ISO 18906 compliant", "Network ready"],
+    specs: ["1800 DPI output", "16mm & 35mm", "Network ready", "High-speed processing"],
     image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80",
     badge: null,
     price: "Contact for pricing",
@@ -109,7 +109,7 @@ const products = [
     nameTh: "ระบบจัดเก็บระดับหอจดหมายเหตุ",
     descEn: "Complete archival storage solution including acid-free boxes, folders, and climate-controlled cabinet systems.",
     descTh: "โซลูชันการจัดเก็บระดับหอจดหมายเหตุครบวงจร รวมถึงกล่อง โฟลเดอร์ปราศจากกรด และระบบตู้ควบคุมสภาพอากาศ",
-    specs: ["Acid-free materials", "Climate control", "Fire resistant", "ISO 11799 compliant"],
+    specs: ["Acid-free materials", "Climate control", "Fire resistant", "Archival-grade storage"],
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
     badge: null,
     price: "Contact for pricing",
@@ -264,7 +264,7 @@ export default function Products() {
           </FadeUp>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: Star, title: language === "en" ? "Certified Quality" : "คุณภาพที่ได้รับการรับรอง", desc: language === "en" ? "All products meet international ISO standards for document management." : "สินค้าทั้งหมดตรงตามมาตรฐาน ISO ระดับสากลสำหรับการจัดการเอกสาร" },
+                    { icon: Star, title: language === "en" ? "Premium Quality" : "คุณภาพที่ยอดนิยม", desc: language === "en" ? "All products are carefully selected and tested for superior performance and reliability." : "สินค้าทั้งหมดถูกคัดเลือกและทดสอบเพื่อสร้างสุดยอด" },
               { icon: Package, title: language === "en" ? "Expert Support" : "การสนับสนุนจากผู้เชี่ยวชาญ", desc: language === "en" ? "Dedicated technical support team with 25+ years of industry experience." : "ทีมสนับสนุนด้านเทคนิคเฉพาะทางที่มีประสบการณ์กว่า 25 ปี" },
               { icon: Archive, title: language === "en" ? "Local Stock" : "สต็อกในประเทศ", desc: language === "en" ? "Products available in Thailand with fast delivery and local service." : "สินค้าพร้อมจำหน่ายในไทยพร้อมจัดส่งรวดเร็วและบริการในประเทศ" },
               { icon: Monitor, title: language === "en" ? "Training Included" : "รวมการฝึกอบรม", desc: language === "en" ? "Comprehensive training programs for all equipment and software purchases." : "โปรแกรมฝึกอบรมครบวงจรสำหรับการซื้ออุปกรณ์และซอฟต์แวร์ทั้งหมด" },

@@ -173,7 +173,7 @@ export default function Services() {
         language === "en" ? "Advanced OCR with 99.9% accuracy" : "OCR ขั้นสูงความแม่นยำ 99.9%",
         language === "en" ? "Multiple output formats: PDF/A, TIFF, JPEG2000" : "รูปแบบผลลัพธ์หลากหลาย: PDF/A, TIFF, JPEG2000",
         language === "en" ? "Automated indexing and metadata tagging" : "การจัดทำดัชนีและแท็กข้อมูลเมตาอัตโนมัติ",
-        language === "en" ? "ISO 15489 compliant processes" : "กระบวนการตามมาตรฐาน ISO 15489",
+
       ],
       image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663482157235/jumThpZwKgu5mhQPgTgwan/services-scanning_a9d57265.jpg",
     },
@@ -208,7 +208,7 @@ export default function Services() {
         language === "en" ? "COM (Computer Output Microfilm) services" : "บริการ COM (Computer Output Microfilm)",
         language === "en" ? "Microfilm duplication and preservation" : "การทำสำเนาและอนุรักษ์ไมโครฟิล์ม",
         language === "en" ? "High-resolution microfilm scanning (600-1200 DPI)" : "การสแกนไมโครฟิล์มความละเอียดสูง (600-1200 DPI)",
-        language === "en" ? "ISO 18901 and ISO 18906 compliant" : "สอดคล้องกับ ISO 18901 และ ISO 18906",
+
       ],
       image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663482157235/jumThpZwKgu5mhQPgTgwan/services-microfilm_a37fc826.jpg",
     },
@@ -333,7 +333,7 @@ export default function Services() {
                   { value: "25+", label: language === "en" ? "Years Experience" : "ปีประสบการณ์" },
                   { value: "500+", label: language === "en" ? "Projects Completed" : "โครงการที่เสร็จสิ้น" },
                   { value: "99.8%", label: language === "en" ? "On-time Delivery" : "ส่งมอบตรงเวลา" },
-                  { value: "ISO", label: language === "en" ? "Certified Processes" : "กระบวนการที่ได้รับการรับรอง" },
+
                 ].map((stat) => (
                   <div key={stat.label} className="bg-white p-4 rounded-sm border border-[oklch(0.88_0.015_75)]">
                     <div className="font-display font-bold text-[oklch(0.22_0.06_250)] text-2xl mb-1">{stat.value}</div>

@@ -103,3 +103,14 @@
 - [x] Remove Case Studies link from Navigation component
 - [x] Remove Case Studies link from Footer component
 - [x] Verify navigation menu displays correctly without Case Studies
+
+## Phase 11: ISO Certificate References Removal (Completed)
+- [x] Search all pages for ISO certificate mentions (Thai and English)
+- [x] Remove ISO 15489 reference from Document Scanning service
+- [x] Remove ISO 18901 and ISO 18906 references from Microfilm service
+- [x] Remove "Certified Processes" ISO stat card from Services page
+- [x] Remove ISO 18906 reference from COM Writer Pro product specs
+- [x] Remove ISO 11799 reference from Archival Storage System specs
+- [x] Change "Certified Quality" to "Premium Quality" in Products page
+- [x] Remove ISO certification translations from LanguageContext (English and Thai)
+- [x] Verify all changes display correctly with no TypeScript errors

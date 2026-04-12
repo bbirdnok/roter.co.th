@@ -142,7 +142,7 @@ const translations: Record<Language, Record<string, string>> = {
     "home.stats.clients": "Enterprise Clients",
     "home.stats.documents": "Documents Processed",
     "home.stats.years": "Years of Excellence",
-    "home.stats.certifications": "ISO Certifications",
+
     "home.services.title": "Comprehensive Document Services",
     "home.services.subtitle": "From physical documents to digital archives, microfilm to electronic workflows — we handle every aspect of your document lifecycle.",
     "home.conversion.title": "Seamless Format Conversion",
@@ -286,7 +286,7 @@ const translations: Record<Language, Record<string, string>> = {
     "home.stats.clients": "ลูกค้าองค์กร",
     "home.stats.documents": "เอกสารที่ดำเนินการ",
     "home.stats.years": "ปีแห่งความเป็นเลิศ",
-    "home.stats.certifications": "การรับรอง ISO",
+
     "home.services.title": "บริการจัดการเอกสารครบวงจร",
     "home.services.subtitle": "ตั้งแต่เอกสารกายภาพถึงคลังดิจิทัล จากไมโครฟิล์มถึง workflow อิเล็กทรอนิกส์ เราดูแลทุกด้านของวงจรชีวิตเอกสารของคุณ",
     "home.conversion.title": "การแปลงรูปแบบที่ราบรื่น",
