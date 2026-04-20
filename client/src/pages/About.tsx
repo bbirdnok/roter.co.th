@@ -190,87 +190,9 @@ export default function About() {
         </div>
       </section>
 
-      {/* Team */}
-      <section className="py-16 bg-[oklch(0.97_0.008_75)]">
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeUp>
-            <div className="text-center mb-12">
-              <h2 className="font-display font-bold text-[oklch(0.22_0.06_250)] text-2xl lg:text-3xl">
-                {language === "en" ? "Leadership Team" : "ทีมผู้นำ"}
-              </h2>
-            </div>
-          </FadeUp>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {teamMembers.map((member, i) => (
-              <FadeUp key={member.nameEn} delay={i * 0.1}>
-                <div className="bg-white border border-[oklch(0.88_0.015_75)] rounded-sm overflow-hidden hover:border-[oklch(0.72_0.12_75/0.4)] transition-colors">
-                  <div className="h-56 overflow-hidden">
-                    <img src={member.image} alt={language === "en" ? member.nameEn : member.nameTh}
-                      className="w-full h-full object-cover object-top" />
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-display font-semibold text-[oklch(0.22_0.06_250)] text-sm mb-0.5">
-                      {language === "en" ? member.nameEn : member.nameTh}
-                    </h3>
-                    <p className="text-xs text-[oklch(0.72_0.12_75)] font-body font-semibold mb-1">
-                      {language === "en" ? member.roleEn : member.roleTh}
-                    </p>
-                    <p className="text-xs text-[oklch(0.52_0.02_250)] font-body">
-                      {language === "en" ? member.expEn : member.expTh}
-                    </p>
-                  </div>
-                </div>
-              </FadeUp>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Certifications */}
-      <section className="py-16 bg-white">
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeUp>
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-px w-8 bg-[oklch(0.72_0.12_75)]" />
-                  <span className="text-[oklch(0.72_0.12_75)] text-xs font-body font-semibold tracking-[0.2em] uppercase">
-                    {language === "en" ? "Certifications" : "การรับรอง"}
-                  </span>
-                </div>
-                <h2 className="font-display font-bold text-[oklch(0.22_0.06_250)] text-2xl lg:text-3xl mb-4">
-                  {language === "en" ? "Internationally Certified" : "ได้รับการรับรองระดับสากล"}
-                </h2>
-                <p className="text-[oklch(0.52_0.02_250)] font-body leading-relaxed mb-6">
-                  {language === "en"
-                    ? "Our processes and quality management systems are certified to the highest international standards, ensuring your documents receive the best possible care."
-                    : "กระบวนการและระบบการจัดการคุณภาพของเราได้รับการรับรองตามมาตรฐานสากลสูงสุด เพื่อให้มั่นใจว่าเอกสารของคุณได้รับการดูแลที่ดีที่สุด"}
-                </p>
-                <div className="grid grid-cols-2 gap-3">
-                  {certifications.map((cert) => (
-                    <div key={cert} className="flex items-center gap-2">
-                      <CheckCircle size={14} className="text-[oklch(0.72_0.12_75)] shrink-0" />
-                      <span className="text-sm font-body text-[oklch(0.38_0.005_250)]">{cert}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                {certifications.map((cert, i) => (
-                  <div key={cert} className="aspect-square bg-[oklch(0.22_0.06_250/0.04)] border border-[oklch(0.88_0.015_75)] rounded-sm flex items-center justify-center p-3">
-                    <div className="text-center">
-                      <Award size={24} className="text-[oklch(0.72_0.12_75)] mx-auto mb-1" />
-                      <p className="text-[9px] font-body font-semibold text-[oklch(0.38_0.005_250)] leading-tight text-center">
-                        {cert.split(" ").slice(0, 2).join(" ")}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </FadeUp>
-        </div>
-      </section>
+
+
 
       {/* CTA */}
       <section className="py-16 bg-[oklch(0.22_0.06_250)]">

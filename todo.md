@@ -119,3 +119,9 @@
 - [x] Remove "View Case Studies" button from Home page hero section
 - [x] Verify no broken links remain
 - [x] Confirm TypeScript errors resolved
+
+## Phase 13: Leadership Team and Certifications Removal from About Page (Completed)
+- [x] Remove Leadership Team section with team member cards
+- [x] Remove Certifications section with ISO certificate listings
+- [x] Verify About page still displays: Company story, milestones, values, and CTA
+- [x] Confirm no broken references or TypeScript errors
