@@ -378,14 +378,7 @@ export default function Home() {
                   <ArrowRight size={16} className="ml-2" />
                 </Button>
               </Link>
-              <Link href="/case-studies">
-                <Button
-                  variant="outline"
-                  className="border-white/40 text-white hover:bg-white/10 hover:border-white font-body font-medium px-6 py-3 h-auto text-sm bg-transparent"
-                >
-                  {t("hero.cta.secondary")}
-                </Button>
-              </Link>
+
             </motion.div>
           </div>
         </div>

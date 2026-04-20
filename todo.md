@@ -114,3 +114,8 @@
 - [x] Change "Certified Quality" to "Premium Quality" in Products page
 - [x] Remove ISO certification translations from LanguageContext (English and Thai)
 - [x] Verify all changes display correctly with no TypeScript errors
+
+## Phase 12: View Case Studies Button Removal (Completed)
+- [x] Remove "View Case Studies" button from Home page hero section
+- [x] Verify no broken links remain
+- [x] Confirm TypeScript errors resolved
