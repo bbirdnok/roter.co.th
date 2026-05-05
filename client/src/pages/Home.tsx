@@ -99,7 +99,7 @@ function ConversionDiagram() {
     },
     "electronic-to-microfilm": {
       title: "Electronic → Microfilm",
-      desc: "COM (Computer Output Microfilm) conversion for long-term archival storage with 500+ year lifespan.",
+      desc: "COM (Computer Output Microfilm) conversion for long-term archival storage with 100+ year lifespan.",
     },
     "microfilm-to-electronic": {
       title: "Microfilm → Electronic",

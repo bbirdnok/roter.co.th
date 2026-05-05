@@ -201,8 +201,8 @@ export default function Services() {
       title: t("services.microfilm.title"),
       subtitle: language === "en" ? "Long-term Archival" : "การจัดเก็บระยะยาว",
       description: language === "en"
-        ? "Microfilm remains the gold standard for long-term document preservation, with a proven lifespan of 500+ years under proper storage conditions. We provide complete microfilm services including creation, duplication, scanning, and reader maintenance."
-        : "ไมโครฟิล์มยังคงเป็นมาตรฐานทองคำสำหรับการอนุรักษ์เอกสารระยะยาว โดยมีอายุการใช้งานที่พิสูจน์แล้วกว่า 500 ปีภายใต้สภาพการจัดเก็บที่เหมาะสม เราให้บริการไมโครฟิล์มครบวงจร รวมถึงการสร้าง ทำสำเนา สแกน และการบำรุงรักษาเครื่องอ่าน",
+        ? "Microfilm remains the gold standard for long-term document preservation, with a proven lifespan of 100+ years under proper storage conditions. We provide complete microfilm services including creation, duplication, scanning, and reader maintenance."
+        : "ไมโครฟิล์มยังคงเป็นมาตรฐานทองคำสำหรับการอนุรักษ์เอกสารระยะยาว โดยมีอายุการใช้งานที่พิสูจน์แล้วกว่า 100 ปีภายใต้สภาพการจัดเก็บที่เหมาะสม เราให้บริการไมโครฟิล์มครบวงจร รวมถึงการสร้าง ทำสำเนา สแกน และการบำรุงรักษาเครื่องอ่าน",
       features: [
         language === "en" ? "16mm and 35mm microfilm production" : "การผลิตไมโครฟิล์ม 16mm และ 35mm",
         language === "en" ? "COM (Computer Output Microfilm) services" : "บริการ COM (Computer Output Microfilm)",

@@ -125,3 +125,8 @@
 - [x] Remove Certifications section with ISO certificate listings
 - [x] Verify About page still displays: Company story, milestones, values, and CTA
 - [x] Confirm no broken references or TypeScript errors
+
+## Phase 14: Microfilm Lifespan Correction (Completed)
+- [x] Update microfilm lifespan from 500+ to 100+ in Home.tsx (Conversion Diagram)
+- [x] Update microfilm lifespan from 500+ to 100+ in Services.tsx (English and Thai)
+- [x] Verify no broken references or TypeScript errors
