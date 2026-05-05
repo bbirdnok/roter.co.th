@@ -203,8 +203,8 @@ export default function About() {
             </h2>
             <p className="text-[oklch(0.70_0.01_250)] font-body mb-6 max-w-lg mx-auto">
               {language === "en"
-                ? "Discover how our 25+ years of expertise can transform your document operations."
-                : "ค้นพบว่าความเชี่ยวชาญกว่า 25 ปีของเราสามารถเปลี่ยนแปลงการดำเนินงานเอกสารของคุณได้อย่างไร"}
+                ? "Discover how our 35+ years of expertise can transform your document operations."
+                : "ค้นหาว่าความเชี่ยวชาญกว่า 35 ปีของเราสามารถเปลี่ยนแปลงการดำเนินงานเอกสารของคุณได้อย่างไร"}
             </p>
             <Link href="/contact">
               <Button className="bg-[oklch(0.72_0.12_75)] text-[oklch(0.22_0.06_250)] hover:bg-[oklch(0.82_0.09_75)] font-body font-semibold px-8">

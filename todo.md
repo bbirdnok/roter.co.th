@@ -130,3 +130,11 @@
 - [x] Update microfilm lifespan from 500+ to 100+ in Home.tsx (Conversion Diagram)
 - [x] Update microfilm lifespan from 500+ to 100+ in Services.tsx (English and Thai)
 - [x] Verify no broken references or TypeScript errors
+
+## Phase 15: How We Work Section Updates (Completed)
+- [x] Update Services.tsx "How We Work": 25+ → 35+ years experience
+- [x] Update Services.tsx "How We Work": 500+ → 100+ projects completed
+- [x] Update Products.tsx "Expert Support": 25+ → 35+ years (English & Thai)
+- [x] Update About.tsx CTA: 25+ → 35+ years (English & Thai)
+- [x] Verify no remaining 25+ or 500+ instances in pages
+- [x] Confirm no TypeScript errors

@@ -330,8 +330,8 @@ export default function Services() {
               </p>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { value: "25+", label: language === "en" ? "Years Experience" : "ปีประสบการณ์" },
-                  { value: "500+", label: language === "en" ? "Projects Completed" : "โครงการที่เสร็จสิ้น" },
+                  { value: "35+", label: language === "en" ? "Years Experience" : "ปีประสบการณ์" },
+                  { value: "100+", label: language === "en" ? "Projects Completed" : "โครงการที่เสร็จสิ้น" },
                   { value: "99.8%", label: language === "en" ? "On-time Delivery" : "ส่งมอบตรงเวลา" },
 
                 ].map((stat) => (

@@ -265,7 +265,7 @@ export default function Products() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
                     { icon: Star, title: language === "en" ? "Premium Quality" : "คุณภาพที่ยอดนิยม", desc: language === "en" ? "All products are carefully selected and tested for superior performance and reliability." : "สินค้าทั้งหมดถูกคัดเลือกและทดสอบเพื่อสร้างสุดยอด" },
-              { icon: Package, title: language === "en" ? "Expert Support" : "การสนับสนุนจากผู้เชี่ยวชาญ", desc: language === "en" ? "Dedicated technical support team with 25+ years of industry experience." : "ทีมสนับสนุนด้านเทคนิคเฉพาะทางที่มีประสบการณ์กว่า 25 ปี" },
+              { icon: Package, title: language === "en" ? "Expert Support" : "การสนับสนุนจากผู้เชี่ยวชาญ", desc: language === "en" ? "Dedicated technical support team with 35+ years of industry experience." : "ทีมสนับสนุนด้านเทคนิคเฉพาะที่มีประสบการณ์กว่า 35 ปี" },
               { icon: Archive, title: language === "en" ? "Local Stock" : "สต็อกในประเทศ", desc: language === "en" ? "Products available in Thailand with fast delivery and local service." : "สินค้าพร้อมจำหน่ายในไทยพร้อมจัดส่งรวดเร็วและบริการในประเทศ" },
               { icon: Monitor, title: language === "en" ? "Training Included" : "รวมการฝึกอบรม", desc: language === "en" ? "Comprehensive training programs for all equipment and software purchases." : "โปรแกรมฝึกอบรมครบวงจรสำหรับการซื้ออุปกรณ์และซอฟต์แวร์ทั้งหมด" },
             ].map((item, i) => (
