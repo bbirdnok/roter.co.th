@@ -1,0 +1,5 @@
+# Copy this file to .dev.vars only for local Cloudflare Pages development.
+# Never commit .dev.vars or real credentials.
+TURNSTILE_SECRET_KEY=replace_with_the_cloudflare_turnstile_secret
+LEAD_NOTIFY_EMAIL=roter@roter.co.th
+LEAD_EMAIL_FROM=website@roter.co.th

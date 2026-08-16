@@ -1,13 +1,22 @@
 /* Contact Page — Archival Prestige Design
  * Multi-step lead qualification form + contact info
  */
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { CheckCircle, MapPin, Phone, Mail, Clock, ArrowRight, ArrowLeft, Building, Users, FileText, Briefcase, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
-import { trpc } from "@/lib/trpc";
+import { createLead } from "@/lib/leadsApi";
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (container: HTMLElement, options: Record<string, unknown>) => string | number;
+      reset: (widgetId?: string | number) => void;
+    };
+  }
+}
 
 function FadeUp({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -52,34 +61,62 @@ export default function Contact() {
   const totalSteps = 3;
 
   const [isLoading, setIsLoading] = useState(false);
-  const submitLeadMutation = trpc.leads.submit.useMutation();
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const turnstileWidgetId = useRef<string | number | null>(null);
+  const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
+
+  useEffect(() => {
+    if (!turnstileSiteKey || !turnstileContainerRef.current) return;
+    const renderWidget = () => {
+      const turnstile = window.turnstile;
+      if (!turnstile || !turnstileContainerRef.current || turnstileWidgetId.current !== null) return;
+      turnstileWidgetId.current = turnstile.render(turnstileContainerRef.current, {
+        sitekey: turnstileSiteKey,
+        callback: setTurnstileToken,
+        "expired-callback": () => setTurnstileToken(""),
+        "error-callback": () => setTurnstileToken(""),
+      });
+    };
+
+    renderWidget();
+    const timer = window.setInterval(renderWidget, 250);
+    return () => window.clearInterval(timer);
+  }, [turnstileSiteKey]);
 
   const update = (field: keyof FormData, value: string) =>
     setForm((prev) => ({ ...prev, [field]: value }));
 
   const handleSubmit = async () => {
-    if (!form.name || !form.email || !form.orgName) {
+    if (!form.name || !form.email || !form.orgName || !form.orgType || !form.orgSize) {
       toast.error(language === "en" ? "Please fill in required fields" : "กรุณากรอกข้อมูลที่จำเป็น");
+      return;
+    }
+    if (!turnstileToken) {
+      toast.error(language === "en" ? "Please complete the security verification" : "กรุณายืนยันการตรวจสอบความปลอดภัย");
       return;
     }
 
     setIsLoading(true);
     try {
-      await submitLeadMutation.mutateAsync({
+      await createLead({
         organizationType: form.orgType,
         organizationName: form.orgName,
         organizationSize: form.orgSize,
         fullName: form.name,
         email: form.email,
-        phone: form.phone || undefined,
-        serviceInterest: form.primaryNeed || undefined,
-        message: form.message || undefined,
+        phone: form.phone || null,
+        serviceInterest: form.primaryNeed || null,
+        message: form.message || null,
+        turnstileToken,
       });
       
       setSubmitted(true);
       toast.success(language === "en" ? "Thank you! We'll contact you within 24 hours." : "ขอบคุณ! เราจะติดต่อคุณภายใน 24 ชั่วโมง");
       setForm(initialForm);
       setStep(1);
+      setTurnstileToken("");
+      if (turnstileWidgetId.current !== null && window.turnstile) window.turnstile.reset(turnstileWidgetId.current);
     } catch (error) {
       console.error("[Contact] Form submission error:", error);
       toast.error(language === "en" ? "Failed to submit form. Please try again." : "ส่งแบบฟอร์มล้มเหลว กรุณาลองใหม่");
@@ -406,6 +443,12 @@ export default function Contact() {
                                 className="w-full px-4 py-2.5 border border-[oklch(0.88_0.015_75)] rounded-sm text-sm font-body text-[oklch(0.22_0.06_250)] placeholder-[oklch(0.65_0.01_250)] focus:outline-none focus:border-[oklch(0.72_0.12_75)] transition-colors resize-none"
                               />
                             </div>
+                            <div ref={turnstileContainerRef} className="pt-2" />
+                            {!turnstileSiteKey && (
+                              <p className="text-xs text-red-600">
+                                {language === "en" ? "Security verification is not configured." : "ยังไม่ได้ตั้งค่าการยืนยันความปลอดภัย"}
+                              </p>
+                            )}
                           </div>
                         </motion.div>
                       )}

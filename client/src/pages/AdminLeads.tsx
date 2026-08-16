@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { trpc } from "@/lib/trpc";
+import { useEffect, useState } from "react";
+import { type Lead, type LeadStatus, listLeads, updateLeadStatus } from "@/lib/leadsApi";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
@@ -8,21 +8,43 @@ import { Loader2, ChevronDown, Mail, Phone, Building, Calendar, CheckCircle2, Cl
 export default function AdminLeads() {
   const { language } = useLanguage();
   const [expandedId, setExpandedId] = useState<number | null>(null);
-  const [statusFilter, setStatusFilter] = useState<"all" | "new" | "contacted" | "qualified" | "rejected">("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | LeadStatus>("all");
+  const [leads, setLeads] = useState<Lead[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [updatingId, setUpdatingId] = useState<number | null>(null);
 
-  const leadsQuery = trpc.leads.list.useQuery({ limit: 100, offset: 0 });
-  const updateStatusMutation = trpc.leads.updateStatus.useMutation({
-    onSuccess: () => {
+  const loadLeads = async () => {
+    setIsLoading(true);
+    try {
+      const result = await listLeads(statusFilter === "all" ? undefined : statusFilter);
+      setLeads(result.leads);
+    } catch (error) {
+      console.error("[Admin Leads] Failed to load leads", error);
+      toast.error(language === "en" ? "Unable to load leads" : "ไม่สามารถโหลดข้อมูลลูกค้าศักยภาพได้");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    void loadLeads();
+  }, [statusFilter]);
+
+  const changeStatus = async (id: number, status: LeadStatus) => {
+    setUpdatingId(id);
+    try {
+      const { lead } = await updateLeadStatus(id, status);
+      setLeads((current) => current.map((item) => (item.id === id ? lead : item)));
       toast.success(language === "en" ? "Status updated" : "อัปเดตสถานะแล้ว");
-      leadsQuery.refetch();
-    },
-    onError: () => {
+    } catch (error) {
+      console.error("[Admin Leads] Failed to update status", error);
       toast.error(language === "en" ? "Failed to update status" : "ล้มเหลวในการอัปเดตสถานะ");
-    },
-  });
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
-  const leads = leadsQuery.data || [];
-  const filteredLeads = statusFilter === "all" ? leads : leads.filter(lead => lead.status === statusFilter);
+  const filteredLeads = leads;
 
   const statusConfig = {
     new: { label: language === "en" ? "New" : "ใหม่", color: "bg-blue-100 text-blue-800", icon: AlertCircle },
@@ -81,7 +103,7 @@ export default function AdminLeads() {
 
         {/* Leads List */}
         <div className="space-y-3">
-          {leadsQuery.isLoading ? (
+          {isLoading ? (
             <div className="flex items-center justify-center py-12">
               <Loader2 size={32} className="animate-spin text-[oklch(0.72_0.12_75)]" />
             </div>
@@ -193,12 +215,12 @@ export default function AdminLeads() {
                         {(["new", "contacted", "qualified", "rejected"] as const).map((status) => (
                           <Button
                             key={status}
-                            onClick={() => updateStatusMutation.mutate({ id: lead.id, status })}
-                            disabled={updateStatusMutation.isPending || lead.status === status}
+                            onClick={() => void changeStatus(lead.id, status)}
+                            disabled={updatingId === lead.id || lead.status === status}
                             variant={lead.status === status ? "default" : "outline"}
                             className="text-sm"
                           >
-                            {updateStatusMutation.isPending ? (
+                            {updatingId === lead.id ? (
                               <Loader2 size={14} className="animate-spin mr-1" />
                             ) : null}
                             {statusConfig[status].label}
