@@ -57,8 +57,16 @@ async function verifyTurnstile(token: string, secret: string, remoteIp?: string)
 }
 
 export async function onRequestPost(context: Context) {
+  // The form is always served from the same host it posts to, so same-origin is the
+  // real rule. Matching the request's own origin keeps CSRF blocked while letting the
+  // form be exercised on *.pages.dev previews as well as the production domains.
   const origin = context.request.headers.get("Origin");
-  if (origin && !["https://roter.co.th", "https://www.roter.co.th"].includes(origin)) {
+  const allowedOrigins = [
+    new URL(context.request.url).origin,
+    "https://roter.co.th",
+    "https://www.roter.co.th",
+  ];
+  if (origin && !allowedOrigins.includes(origin)) {
     return json({ error: "Origin not allowed" }, { status: 403 });
   }
 

@@ -1,5 +1,8 @@
 # Copy this file to .dev.vars only for local Cloudflare Pages development.
 # Never commit .dev.vars or real credentials.
 TURNSTILE_SECRET_KEY=replace_with_the_cloudflare_turnstile_secret
+# Basic auth guarding /admin/* and /api/admin/*. Admin stays closed unless both are set.
+ADMIN_USERNAME=replace_with_the_admin_username
+ADMIN_PASSWORD=replace_with_a_long_random_admin_password
 LEAD_NOTIFY_EMAIL=roter@roter.co.th
 LEAD_EMAIL_FROM=website@roter.co.th
