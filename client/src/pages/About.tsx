@@ -82,7 +82,7 @@ export default function About() {
             <FadeUp delay={0.2}>
               <div className="relative">
                 <div className="rounded-sm overflow-hidden shadow-[0_20px_60px_oklch(0.22_0.06_250/0.3)]">
-                  <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663482157235/jumThpZwKgu5mhQPgTgwan/about-office_d3b057c0.jpg"
+                  <img src="/images/about-office.svg"
                     alt="Roter Thailand Office" className="w-full h-80 object-cover" />
                 </div>
                 <div className="absolute -bottom-5 -right-5 bg-[oklch(0.72_0.12_75)] p-5 rounded-sm shadow-lg">

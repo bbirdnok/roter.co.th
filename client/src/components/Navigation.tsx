@@ -48,7 +48,7 @@ export default function Navigation() {
             <div className="flex items-center gap-2 group">
               {/* Company Logo */}
               <img
-                src="https://d2xsxph8kpxj0f.cloudfront.net/310519663482157235/jumThpZwKgu5mhQPgTgwan/roter-logo_b254d187.png"
+                src="/images/roter-logo.png"
                 alt="Roter Thailand Logo"
                 className="h-10 w-auto object-contain group-hover:opacity-80 transition-opacity"
               />

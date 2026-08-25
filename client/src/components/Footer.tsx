@@ -37,7 +37,7 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <div className="mb-5">
               <img
-                src="https://d2xsxph8kpxj0f.cloudfront.net/310519663482157235/jumThpZwKgu5mhQPgTgwan/roter-logo_b254d187.png"
+                src="/images/roter-logo.png"
                 alt="Roter Thailand Logo"
                 className="h-12 w-auto object-contain"
               />

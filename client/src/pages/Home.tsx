@@ -310,7 +310,7 @@ export default function Home() {
         ? "Preservation of 500-Year-Old Palm Leaf Manuscripts"
         : "อนุรักษ์สมุดข่อยอายุ 500 ปี",
       result: language === "en" ? "12,000 manuscripts preserved" : "อนุรักษ์ต้นฉบับ 12,000 เล่ม",
-      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663482157235/jumThpZwKgu5mhQPgTgwan/ancient-documents_9032e276.jpg",
+      image: "/images/ancient-documents.svg",
       tag: "education",
     },
   ];
@@ -322,7 +322,7 @@ export default function Home() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <img
-            src="https://d2xsxph8kpxj0f.cloudfront.net/310519663482157235/jumThpZwKgu5mhQPgTgwan/hero-main_d0ecf030.jpg"
+            src="/images/hero-main.svg"
             alt="Document archive"
             className="w-full h-full object-cover"
           />
@@ -592,7 +592,7 @@ export default function Home() {
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://d2xsxph8kpxj0f.cloudfront.net/310519663482157235/jumThpZwKgu5mhQPgTgwan/about-office_d3b057c0.jpg"
+            src="/images/about-office.svg"
             alt="Office"
             className="w-full h-full object-cover"
           />

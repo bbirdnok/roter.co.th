@@ -175,7 +175,7 @@ export default function Services() {
         language === "en" ? "Automated indexing and metadata tagging" : "การจัดทำดัชนีและแท็กข้อมูลเมตาอัตโนมัติ",
 
       ],
-      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663482157235/jumThpZwKgu5mhQPgTgwan/services-scanning_a9d57265.jpg",
+      image: "/images/services-scanning.svg",
     },
     {
       id: "electronic",
@@ -210,7 +210,7 @@ export default function Services() {
         language === "en" ? "High-resolution microfilm scanning (600-1200 DPI)" : "การสแกนไมโครฟิล์มความละเอียดสูง (600-1200 DPI)",
 
       ],
-      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663482157235/jumThpZwKgu5mhQPgTgwan/services-microfilm_a37fc826.jpg",
+      image: "/images/services-microfilm.svg",
     },
     {
       id: "ancient",
@@ -227,7 +227,7 @@ export default function Services() {
         language === "en" ? "Archival-grade storage and housing" : "การจัดเก็บและบรรจุภัณฑ์ระดับหอจดหมายเหตุ",
         language === "en" ? "Digital access portals for researchers" : "พอร์ทัลการเข้าถึงดิจิทัลสำหรับนักวิจัย",
       ],
-      image: "https://d2xsxph8kpxj0f.cloudfront.net/310519663482157235/jumThpZwKgu5mhQPgTgwan/ancient-documents_9032e276.jpg",
+      image: "/images/ancient-documents.svg",
       reverse: true,
     },
     {
