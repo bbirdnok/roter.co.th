@@ -26,8 +26,7 @@ export function secureResponse(response: Response, privateResponse = true) {
   result.headers.set('Strict-Transport-Security', 'max-age=86400');
   result.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   result.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=()');
-  result.headers.set('Content-Security-Policy', "base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'");
-  result.headers.set('Content-Security-Policy-Report-Only', CSP);
+  result.headers.set('Content-Security-Policy', CSP);
   if (privateResponse) result.headers.set('Cache-Control', 'no-store');
   return result;
 }
