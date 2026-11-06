@@ -1,0 +1,13 @@
+{
+  "name": "roter-thailand-restore-local",
+  "compatibility_date": "2026-08-16",
+  "pages_build_output_dir": "./dist",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "roter-thailand-restore-local",
+      "database_id": "00000000-0000-0000-0000-000000000002",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

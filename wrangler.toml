@@ -6,3 +6,9 @@ pages_build_output_dir = "./dist"
 binding = "DB"
 database_name = "roter-thailand-leads"
 database_id = "383d7e4d-72d7-476d-bc05-27766f32e969"
+
+# Preview is isolated from production. Do not remove this override.
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "roter-thailand-leads-preview"
+database_id = "20c27f11-14f2-42c6-ab5b-cb80659b9f28"
