@@ -31,10 +31,14 @@ async function readError(response: Response) {
 }
 
 export async function createLead(input: CreateLeadInput) {
+  const body = JSON.stringify(input);
+  if (new TextEncoder().encode(body).byteLength > 16_384) {
+    throw new LeadSubmissionError(413, 'Request body too large');
+  }
   const response = await fetch("/api/leads", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(input),
+    body,
     signal: AbortSignal.timeout(20_000),
   });
 

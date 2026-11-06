@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import type { D1Database } from '../../shared/d1';
 import { publicError } from '../../shared/httpSecurity';
 import { onRequestPost } from '../../functions/api/leads';
+import { createLead } from '../../client/src/lib/leadsApi';
 
 function environment() {
   const sqlite = new DatabaseSync(':memory:');
@@ -32,6 +33,13 @@ function verify(response = { success: true, hostname: 'preview.example', action:
 }
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 describe('real SQLite submission persistence and idempotency', () => {
+  it('detects a combined UTF-8 request exceeding the server body limit before sending or consuming its token', async () => {
+    const fetcher = verify();
+    await expect(createLead({ ...payload, organizationName: 'ก'.repeat(255), fullName: 'ก'.repeat(255),
+      jobTitle: 'ก'.repeat(120), message: 'ก'.repeat(4000), turnstileToken: 'x'.repeat(2048), email: 'a'.repeat(300) + '@example.invalid' }))
+      .rejects.toMatchObject({ status: 413 });
+    expect(fetcher).not.toHaveBeenCalled();
+  });
   it('stores every form detail after verification with bound SQL', async () => {
     const env = environment(); verify(); expect((await submit(env)).status).toBe(201);
     const row = env.sqlite.prepare('SELECT * FROM leads').get()!;

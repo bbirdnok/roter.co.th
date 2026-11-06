@@ -125,6 +125,8 @@ export default function Contact() {
     } catch (error) {
       const message = error instanceof LeadSubmissionError && error.status === 429
         ? (language === 'en' ? 'Too many attempts. Please wait a minute, then verify and try again.' : 'ส่งคำขอถี่เกินไป กรุณารอสักครู่ แล้วยืนยันและส่งใหม่')
+        : error instanceof LeadSubmissionError && error.status === 413
+        ? (language === 'en' ? 'The combined details are too long. Please shorten your message or other fields, then verify and retry.' : 'ข้อมูลรวมยาวเกินไป กรุณาย่อข้อความหรือข้อมูลบางช่อง แล้วยืนยันและส่งใหม่')
         : (language === 'en' ? 'We could not confirm the submission. Your details are still here. Verify again and retry; the same request will not be saved twice.' : 'ยังยืนยันการส่งไม่สำเร็จ ข้อมูลที่กรอกยังอยู่ กรุณายืนยันความปลอดภัยและส่งใหม่ ระบบจะไม่บันทึกคำขอเดิมซ้ำ');
       setFormError(message); setTurnstileToken(''); setTurnstileReset(n => n + 1);
     } finally { submitting.current = false; setIsLoading(false); }
