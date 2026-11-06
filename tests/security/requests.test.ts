@@ -5,6 +5,7 @@ import { escapeHtml, HttpError, integerParameter, readJsonObject, secureResponse
 import { rateLimit } from '../../shared/rateLimit';
 import { onRequest as api } from '../../functions/api/_middleware';
 import { onRequest as admin } from '../../functions/api/admin/_middleware';
+import { onRequest as adminPage } from '../../functions/admin/_middleware';
 import { onRequestGet } from '../../functions/api/admin/leads';
 import { onRequestPatch } from '../../functions/api/admin/leads/[id]';
 import { onRequestPost } from '../../functions/api/leads';
@@ -54,6 +55,16 @@ async function handle(req: Request, env = environment()) {
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('authentication and request boundaries', () => {
+  it.each(['/admin', '/admin/'])('redirects authenticated admin entry %s to the real list', async path => {
+    const next = vi.fn();
+    const response = await adminPage({ request: request(path), env: environment(), next });
+    expect(response.status).toBe(302); expect(response.headers.get('Location')).toBe('/admin/leads');
+    expect(response.headers.get('Cache-Control')).toBe('no-store'); expect(next).not.toHaveBeenCalled();
+  });
+  it('requires authentication before redirecting an admin entry', async () => {
+    const response = await adminPage({ request: request('/admin', { auth: null }), env: environment(), next: vi.fn() });
+    expect(response.status).toBe(401); expect(response.headers.get('Location')).toBe(null);
+  });
   it('fails closed when credentials are missing', () => {
     expect(requireAdmin(request('/admin'), {}).status).toBe(503);
   });

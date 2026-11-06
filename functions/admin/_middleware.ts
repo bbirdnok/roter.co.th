@@ -17,6 +17,9 @@ export async function onRequest(context: Context) {
     const denied = requireAdmin(context.request, context.env);
     if (denied) return secureResponse(denied);
     if (!['GET', 'HEAD'].includes(context.request.method)) return json({ error: 'Method not allowed' }, { status: 405, headers: { Allow: 'GET, HEAD' } });
+    if (['/admin', '/admin/'].includes(new URL(context.request.url).pathname)) {
+      return secureResponse(new Response(null, { status: 302, headers: { Location: '/admin/leads' } }));
+    }
     return secureResponse(await context.next());
   } catch (error) { return publicError(error); }
 }
