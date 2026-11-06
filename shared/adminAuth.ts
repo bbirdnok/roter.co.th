@@ -20,10 +20,11 @@ function timingSafeEqual(a: string, b: string) {
 
 /** atob() yields one char per byte, so re-decode as UTF-8 to support non-ASCII passwords. */
 function decodeBase64(value: string) {
+  if (value.length > 4096 || !/^[A-Za-z0-9+/]+={0,2}$/.test(value)) throw new Error('Invalid credentials');
   const binary = atob(value);
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
-  return new TextDecoder().decode(bytes);
+  return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
 }
 
 function challenge() {

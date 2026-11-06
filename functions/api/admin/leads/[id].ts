@@ -1,14 +1,6 @@
+import type { D1Database } from '../../../../shared/d1';
+import { integerParameter, json, readJsonObject } from '../../../../shared/httpSecurity';
 type LeadStatus = "new" | "contacted" | "qualified" | "rejected";
-
-interface D1Statement {
-  bind(...values: unknown[]): D1Statement;
-  run(): Promise<{ meta?: { changes?: number } }>;
-  first<T>(): Promise<T | null>;
-}
-
-interface D1Database {
-  prepare(query: string): D1Statement;
-}
 
 interface Context {
   request: Request;
@@ -16,20 +8,13 @@ interface Context {
   params: { id?: string | string[] };
 }
 
-function json(data: unknown, init: ResponseInit = {}) {
-  return new Response(JSON.stringify(data), {
-    ...init,
-    headers: { "Content-Type": "application/json; charset=UTF-8", ...init.headers },
-  });
-}
-
 const statusValues = new Set<LeadStatus>(["new", "contacted", "qualified", "rejected"]);
 
 export async function onRequestPatch(context: Context) {
   const rawId = Array.isArray(context.params.id) ? context.params.id[0] : context.params.id;
-  const id = Number(rawId);
-  const payload = (await context.request.json().catch(() => null)) as { status?: LeadStatus } | null;
-  if (!Number.isInteger(id) || id <= 0 || !payload?.status || !statusValues.has(payload.status)) {
+  const id = integerParameter(rawId ?? '', 0, 1, Number.MAX_SAFE_INTEGER);
+  const payload = await readJsonObject(context.request, 1024);
+  if (Object.keys(payload).some(key => key !== 'status') || typeof payload.status !== 'string' || !statusValues.has(payload.status as LeadStatus)) {
     return json({ error: "Invalid update request" }, { status: 400 });
   }
 

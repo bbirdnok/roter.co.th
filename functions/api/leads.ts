@@ -1,13 +1,5 @@
-type LeadStatus = "new" | "contacted" | "qualified" | "rejected";
-
-interface D1Statement {
-  bind(...values: unknown[]): D1Statement;
-  run(): Promise<{ meta?: { last_row_id?: number } }>;
-}
-
-interface D1Database {
-  prepare(query: string): D1Statement;
-}
+import type { D1Database } from '../../shared/d1';
+import { escapeHtml, HttpError, json, readJsonObject, requireSameOrigin, textField } from '../../shared/httpSecurity';
 
 interface EmailBinding {
   send(message: { to: string; from: string; subject: string; html: string; text: string }): Promise<void>;
@@ -31,18 +23,8 @@ const MAX_MESSAGE_LENGTH = 4_000;
 const allowedOrgTypes = new Set(["government", "finance", "healthcare", "enterprise", "education", "other"]);
 const allowedOrgSizes = new Set(["small", "medium", "large", "enterprise"]);
 
-function json(data: unknown, init: ResponseInit = {}) {
-  return new Response(JSON.stringify(data), {
-    ...init,
-    headers: { "Content-Type": "application/json; charset=UTF-8", ...init.headers },
-  });
-}
-
-function text(value: unknown, maxLength: number) {
-  return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
-}
-
-async function verifyTurnstile(token: string, secret: string, remoteIp?: string) {
+async function verifyTurnstile(token: string, secret: string, hostname: string, remoteIp?: string) {
+  if (!secret) throw new HttpError(503, 'Security verification is unavailable');
   const body = new FormData();
   body.append("secret", secret);
   body.append("response", token);
@@ -51,40 +33,29 @@ async function verifyTurnstile(token: string, secret: string, remoteIp?: string)
   const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
     method: "POST",
     body,
+    signal: AbortSignal.timeout(8000),
   });
-  const result = (await response.json()) as { success?: boolean };
-  return result.success === true;
+  if (!response.ok) throw new HttpError(503, 'Security verification is unavailable');
+  const result = (await response.json()) as { success?: boolean; hostname?: string };
+  return result.success === true && result.hostname === hostname;
 }
 
 export async function onRequestPost(context: Context) {
-  // The form is always served from the same host it posts to, so same-origin is the
-  // real rule. Matching the request's own origin keeps CSRF blocked while letting the
-  // form be exercised on *.pages.dev previews as well as the production domains.
-  const origin = context.request.headers.get("Origin");
-  const allowedOrigins = [
-    new URL(context.request.url).origin,
-    "https://roter.co.th",
-    "https://www.roter.co.th",
-  ];
-  if (origin && !allowedOrigins.includes(origin)) {
-    return json({ error: "Origin not allowed" }, { status: 403 });
-  }
+  requireSameOrigin(context.request);
+  const payload = await readJsonObject(context.request);
 
-  const payload = (await context.request.json().catch(() => null)) as Record<string, unknown> | null;
-  if (!payload) return json({ error: "Invalid request body" }, { status: 400 });
-
-  const honeypot = text(payload.website, 200);
+  const honeypot = textField(payload.website, 200);
   if (honeypot) return json({ error: "Invalid submission" }, { status: 400 });
 
-  const organizationType = text(payload.organizationType, 64);
-  const organizationName = text(payload.organizationName, 255);
-  const organizationSize = text(payload.organizationSize, 64);
-  const fullName = text(payload.fullName, 255);
-  const email = text(payload.email, 320).toLowerCase();
-  const phone = text(payload.phone, 32) || null;
-  const serviceInterest = text(payload.serviceInterest, 255) || null;
-  const message = text(payload.message, MAX_MESSAGE_LENGTH) || null;
-  const turnstileToken = text(payload.turnstileToken, 2_048);
+  const organizationType = textField(payload.organizationType, 64, true);
+  const organizationName = textField(payload.organizationName, 255, true);
+  const organizationSize = textField(payload.organizationSize, 64, true);
+  const fullName = textField(payload.fullName, 255, true);
+  const email = textField(payload.email, 320, true).toLowerCase();
+  const phone = textField(payload.phone, 32) || null;
+  const serviceInterest = textField(payload.serviceInterest, 255) || null;
+  const message = textField(payload.message, MAX_MESSAGE_LENGTH) || null;
+  const turnstileToken = textField(payload.turnstileToken, 2048, true);
 
   if (!organizationName || !fullName || !email || !turnstileToken) {
     return json({ error: "Missing required fields" }, { status: 400 });
@@ -99,6 +70,7 @@ export async function onRequestPost(context: Context) {
   const turnstileOk = await verifyTurnstile(
     turnstileToken,
     context.env.TURNSTILE_SECRET_KEY,
+    new URL(context.request.url).hostname,
     context.request.headers.get("CF-Connecting-IP") || undefined,
   );
   if (!turnstileOk) return json({ error: "Security verification failed" }, { status: 400 });
@@ -122,7 +94,7 @@ export async function onRequestPost(context: Context) {
       ["Service", serviceInterest || "—"],
       ["Message", message || "—"],
     ]
-      .map(([label, value]) => `<tr><td style="padding:4px 12px 4px 0"><strong>${label}</strong></td><td>${String(value).replace(/</g, "&lt;")}</td></tr>`)
+      .map(([label, value]) => `<tr><td style="padding:4px 12px 4px 0"><strong>${label}</strong></td><td>${escapeHtml(String(value))}</td></tr>`)
       .join("");
     context.waitUntil(
       context.env.EMAIL.send({
@@ -131,7 +103,7 @@ export async function onRequestPost(context: Context) {
         subject: `New Roter website lead #${leadId}`,
         html: `<h2>New website lead #${leadId}</h2><table>${detailRows}</table>`,
         text: `New Roter website lead #${leadId}\nOrganization: ${organizationName}\nName: ${fullName}\nEmail: ${email}\nPhone: ${phone || "—"}\nService: ${serviceInterest || "—"}\nMessage: ${message || "—"}`,
-      }),
+      }).catch(() => { console.warn('Lead notification delivery failed'); }),
     );
   }
 

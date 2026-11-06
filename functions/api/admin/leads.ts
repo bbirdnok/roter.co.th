@@ -1,14 +1,6 @@
+import type { D1Database } from '../../../shared/d1';
+import { integerParameter, json } from '../../../shared/httpSecurity';
 type LeadStatus = "new" | "contacted" | "qualified" | "rejected";
-
-interface D1Statement {
-  bind(...values: unknown[]): D1Statement;
-  all<T>(): Promise<{ results: T[] }>;
-  first<T>(): Promise<T | null>;
-}
-
-interface D1Database {
-  prepare(query: string): D1Statement;
-}
 
 interface Context {
   request: Request;
@@ -30,20 +22,13 @@ type LeadRow = {
   updatedAt: string;
 };
 
-function json(data: unknown, init: ResponseInit = {}) {
-  return new Response(JSON.stringify(data), {
-    ...init,
-    headers: { "Content-Type": "application/json; charset=UTF-8", ...init.headers },
-  });
-}
-
 const statusValues = new Set<LeadStatus>(["new", "contacted", "qualified", "rejected"]);
 
 export async function onRequestGet(context: Context) {
   const url = new URL(context.request.url);
   const requestedStatus = url.searchParams.get("status") as LeadStatus | null;
-  const limit = Math.min(Math.max(Number(url.searchParams.get("limit") || 100), 1), 100);
-  const offset = Math.max(Number(url.searchParams.get("offset") || 0), 0);
+  const limit = integerParameter(url.searchParams.get("limit"), 100, 1, 100);
+  const offset = integerParameter(url.searchParams.get("offset"), 0, 0, 10_000);
 
   if (requestedStatus && !statusValues.has(requestedStatus)) {
     return json({ error: "Invalid status" }, { status: 400 });
