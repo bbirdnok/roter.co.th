@@ -1,22 +1,14 @@
 /* Contact Page — Archival Prestige Design
  * Multi-step lead qualification form + contact info
  */
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef, useId } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { CheckCircle, MapPin, Phone, Mail, Clock, ArrowRight, ArrowLeft, Building, Users, FileText, Briefcase, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
-import { createLead } from "@/lib/leadsApi";
-
-declare global {
-  interface Window {
-    turnstile?: {
-      render: (container: HTMLElement, options: Record<string, unknown>) => string | number;
-      reset: (widgetId?: string | number) => void;
-    };
-  }
-}
+import { ContactTurnstile } from "@/components/ContactTurnstile";
+import { createLead, LeadSubmissionError } from "@/lib/leadsApi";
 
 function FadeUp({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef(null);
@@ -52,6 +44,31 @@ const initialForm: FormData = {
   name: "", title: "", email: "", phone: "", message: "",
 };
 
+const SelectOption = ({ value, selected, onClick, children }: { value: string; selected: boolean; onClick: () => void; children: React.ReactNode }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className={`w-full text-left px-4 py-3 rounded-sm border text-sm font-body transition-all ${
+      selected
+        ? "border-[oklch(0.72_0.12_75)] bg-[oklch(0.72_0.12_75/0.06)] text-[oklch(0.22_0.06_250)]"
+        : "border-[oklch(0.88_0.015_75)] text-[oklch(0.52_0.02_250)] hover:border-[oklch(0.72_0.12_75/0.4)]"
+    }`}
+  >
+    {children}
+  </button>
+);
+
+function InputField({ label, value, onChange, type = 'text', placeholder = '', required = false, maxLength = 255 }: {
+  label: string; value: string; onChange(value: string): void; type?: string; placeholder?: string; required?: boolean; maxLength?: number;
+}) {
+  const id = useId();
+  return <div>
+    <label htmlFor={id} className="block text-xs font-body font-semibold text-[oklch(0.38_0.005_250)] mb-1.5">{label} {required && <span className="text-red-500">*</span>}</label>
+    <input id={id} type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} required={required} maxLength={maxLength}
+      className="w-full px-4 py-2.5 border border-[oklch(0.88_0.015_75)] rounded-sm text-sm font-body text-[oklch(0.22_0.06_250)] placeholder-[oklch(0.65_0.01_250)] focus:outline-none focus:border-[oklch(0.72_0.12_75)] transition-colors" />
+  </div>;
+}
+
 export default function Contact() {
   const { t, language } = useLanguage();
   const [step, setStep] = useState(1);
@@ -61,68 +78,56 @@ export default function Contact() {
   const totalSteps = 3;
 
   const [isLoading, setIsLoading] = useState(false);
-  const [turnstileToken, setTurnstileToken] = useState("");
-  const turnstileContainerRef = useRef<HTMLDivElement>(null);
-  const turnstileWidgetId = useRef<string | number | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const [turnstileReset, setTurnstileReset] = useState(0);
+  const [formError, setFormError] = useState('');
+  const [submittedContact, setSubmittedContact] = useState({ name: '', email: '' });
+  const submitting = useRef(false);
+  const submissionId = useRef(crypto.randomUUID());
   const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
-
-  useEffect(() => {
-    if (!turnstileSiteKey || !turnstileContainerRef.current) return;
-    const renderWidget = () => {
-      const turnstile = window.turnstile;
-      if (!turnstile || !turnstileContainerRef.current || turnstileWidgetId.current !== null) return;
-      turnstileWidgetId.current = turnstile.render(turnstileContainerRef.current, {
-        sitekey: turnstileSiteKey,
-        callback: setTurnstileToken,
-        "expired-callback": () => setTurnstileToken(""),
-        "error-callback": () => setTurnstileToken(""),
-      });
-    };
-
-    renderWidget();
-    const timer = window.setInterval(renderWidget, 250);
-    return () => window.clearInterval(timer);
-  }, [turnstileSiteKey]);
-
-  const update = (field: keyof FormData, value: string) =>
-    setForm((prev) => ({ ...prev, [field]: value }));
-
+  const update = (field: keyof FormData, value: string) => {
+    if (submitting.current) return;
+    if (form[field] === value) return;
+    submissionId.current = crypto.randomUUID();
+    setFormError(''); setForm(prev => ({ ...prev, [field]: value }));
+  };
+  const validateOrganization = () => {
+    if (!form.orgType || !form.orgName.trim() || !form.orgSize) {
+      setFormError(language === 'en' ? 'Please select an organization type and size, and enter its name.' : 'กรุณาเลือกประเภทและขนาดองค์กร พร้อมกรอกชื่อองค์กร'); return false;
+    }
+    return true;
+  };
+  const nextStep = () => {
+    if (step === 1 && !validateOrganization()) return;
+    setFormError(''); setStep(n => n + 1);
+  };
   const handleSubmit = async () => {
-    if (!form.name || !form.email || !form.orgName || !form.orgType || !form.orgSize) {
-      toast.error(language === "en" ? "Please fill in required fields" : "กรุณากรอกข้อมูลที่จำเป็น");
-      return;
+    if (submitting.current) return;
+    if (!validateOrganization()) { setStep(1); return; }
+    if (!form.name.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      setFormError(language === 'en' ? 'Please enter your name and a valid email address.' : 'กรุณากรอกชื่อและอีเมลที่ถูกต้อง'); return;
     }
     if (!turnstileToken) {
-      toast.error(language === "en" ? "Please complete the security verification" : "กรุณายืนยันการตรวจสอบความปลอดภัย");
-      return;
+      setFormError(language === 'en' ? 'Please complete security verification.' : 'กรุณายืนยันการตรวจสอบความปลอดภัย'); return;
     }
-
-    setIsLoading(true);
+    submitting.current = true; setIsLoading(true); setFormError('');
     try {
       await createLead({
-        organizationType: form.orgType,
-        organizationName: form.orgName,
-        organizationSize: form.orgSize,
-        fullName: form.name,
-        email: form.email,
-        phone: form.phone || null,
-        serviceInterest: form.primaryNeed || null,
-        message: form.message || null,
-        turnstileToken,
+        organizationType: form.orgType, organizationName: form.orgName.trim(), organizationSize: form.orgSize,
+        fullName: form.name.trim(), email: form.email.trim(), phone: form.phone || null,
+        serviceInterest: form.primaryNeed || null, message: form.message || null,
+        jobTitle: form.title || null, documentVolume: form.documentVolume || null, timeline: form.timeline || null,
+        submissionId: submissionId.current, turnstileToken,
       });
-      
-      setSubmitted(true);
-      toast.success(language === "en" ? "Thank you! We'll contact you within 24 hours." : "ขอบคุณ! เราจะติดต่อคุณภายใน 24 ชั่วโมง");
-      setForm(initialForm);
-      setStep(1);
-      setTurnstileToken("");
-      if (turnstileWidgetId.current !== null && window.turnstile) window.turnstile.reset(turnstileWidgetId.current);
+      setSubmittedContact({ name: form.name.trim(), email: form.email.trim() });
+      setSubmitted(true); setForm(initialForm); setStep(1); setTurnstileToken('');
+      toast.success(language === 'en' ? 'Your request has been saved.' : 'บันทึกคำขอแล้ว');
     } catch (error) {
-      console.error("[Contact] Form submission error:", error);
-      toast.error(language === "en" ? "Failed to submit form. Please try again." : "ส่งแบบฟอร์มล้มเหลว กรุณาลองใหม่");
-    } finally {
-      setIsLoading(false);
-    }
+      const message = error instanceof LeadSubmissionError && error.status === 429
+        ? (language === 'en' ? 'Too many attempts. Please wait a minute, then verify and try again.' : 'ส่งคำขอถี่เกินไป กรุณารอสักครู่ แล้วยืนยันและส่งใหม่')
+        : (language === 'en' ? 'We could not confirm the submission. Your details are still here. Verify again and retry; the same request will not be saved twice.' : 'ยังยืนยันการส่งไม่สำเร็จ ข้อมูลที่กรอกยังอยู่ กรุณายืนยันความปลอดภัยและส่งใหม่ ระบบจะไม่บันทึกคำขอเดิมซ้ำ');
+      setFormError(message); setTurnstileToken(''); setTurnstileReset(n => n + 1);
+    } finally { submitting.current = false; setIsLoading(false); }
   };
 
   const orgTypes = [
@@ -143,37 +148,6 @@ export default function Contact() {
     { value: "consulting", labelEn: "Consulting & Advisory", labelTh: "การให้คำปรึกษา" },
     { value: "products", labelEn: "Equipment & Software Purchase", labelTh: "การซื้ออุปกรณ์และซอฟต์แวร์" },
   ];
-
-  const SelectOption = ({ value, selected, onClick, children }: { value: string; selected: boolean; onClick: () => void; children: React.ReactNode }) => (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`w-full text-left px-4 py-3 rounded-sm border text-sm font-body transition-all ${
-        selected
-          ? "border-[oklch(0.72_0.12_75)] bg-[oklch(0.72_0.12_75/0.06)] text-[oklch(0.22_0.06_250)]"
-          : "border-[oklch(0.88_0.015_75)] text-[oklch(0.52_0.02_250)] hover:border-[oklch(0.72_0.12_75/0.4)]"
-      }`}
-    >
-      {children}
-    </button>
-  );
-
-  const InputField = ({ label, value, onChange, type = "text", placeholder = "", required = false }: {
-    label: string; value: string; onChange: (v: string) => void; type?: string; placeholder?: string; required?: boolean;
-  }) => (
-    <div>
-      <label className="block text-xs font-body font-semibold text-[oklch(0.38_0.005_250)] mb-1.5">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
-      <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className="w-full px-4 py-2.5 border border-[oklch(0.88_0.015_75)] rounded-sm text-sm font-body text-[oklch(0.22_0.06_250)] placeholder-[oklch(0.65_0.01_250)] focus:outline-none focus:border-[oklch(0.72_0.12_75)] transition-colors"
-      />
-    </div>
-  );
 
   return (
     <div className="min-h-screen">
@@ -330,7 +304,7 @@ export default function Contact() {
                             </div>
                             <InputField
                               label={language === "en" ? "Organization Name" : "ชื่อองค์กร"}
-                              value={form.orgName}
+                              required value={form.orgName}
                               onChange={(v) => update("orgName", v)}
                               placeholder={language === "en" ? "e.g. Ministry of Finance" : "เช่น กระทรวงการคลัง"}
                             />
@@ -420,22 +394,22 @@ export default function Contact() {
                             {language === "en" ? "Your contact details" : "ข้อมูลติดต่อของคุณ"}
                           </h3>
                           <p className="text-sm text-[oklch(0.52_0.02_250)] font-body mb-5">
-                            {language === "en" ? "We'll get back to you within 24 hours." : "เราจะตอบกลับภายใน 24 ชั่วโมง"}
+                            {language === "en" ? "Please leave your contact details so our team can respond." : "กรุณาฝากข้อมูลติดต่อเพื่อให้ทีมงานติดต่อกลับ"}
                           </p>
                           <div className="space-y-4">
                             <div className="grid sm:grid-cols-2 gap-4">
                               <InputField label={language === "en" ? "Full Name" : "ชื่อ-นามสกุล"} value={form.name} onChange={(v) => update("name", v)} required placeholder={language === "en" ? "Your full name" : "ชื่อ-นามสกุลของคุณ"} />
-                              <InputField label={language === "en" ? "Job Title" : "ตำแหน่งงาน"} value={form.title} onChange={(v) => update("title", v)} placeholder={language === "en" ? "e.g. IT Director" : "เช่น ผู้อำนวยการ IT"} />
+                              <InputField label={language === "en" ? "Job Title" : "ตำแหน่งงาน"} maxLength={120} value={form.title} onChange={(v) => update("title", v)} placeholder={language === "en" ? "e.g. IT Director" : "เช่น ผู้อำนวยการ IT"} />
                             </div>
                             <div className="grid sm:grid-cols-2 gap-4">
-                              <InputField label={language === "en" ? "Email Address" : "อีเมล"} value={form.email} onChange={(v) => update("email", v)} type="email" required placeholder="email@company.com" />
-                              <InputField label={language === "en" ? "Phone Number" : "เบอร์โทรศัพท์"} value={form.phone} onChange={(v) => update("phone", v)} type="tel" placeholder="+66 XX XXX XXXX" />
+                              <InputField label={language === "en" ? "Email Address" : "อีเมล"} value={form.email} onChange={(v) => update("email", v)} type="email" maxLength={320} required placeholder="email@company.com" />
+                              <InputField label={language === "en" ? "Phone Number" : "เบอร์โทรศัพท์"} value={form.phone} onChange={(v) => update("phone", v)} type="tel" maxLength={32} placeholder="+66 XX XXX XXXX" />
                             </div>
                             <div>
                               <label className="block text-xs font-body font-semibold text-[oklch(0.38_0.005_250)] mb-1.5">
                                 {language === "en" ? "Additional Message" : "ข้อความเพิ่มเติม"}
                               </label>
-                              <textarea
+                              <textarea aria-label={language === "en" ? "Additional Message" : "ข้อความเพิ่มเติม"} maxLength={4000}
                                 value={form.message}
                                 onChange={(e) => update("message", e.target.value)}
                                 rows={3}
@@ -443,34 +417,34 @@ export default function Contact() {
                                 className="w-full px-4 py-2.5 border border-[oklch(0.88_0.015_75)] rounded-sm text-sm font-body text-[oklch(0.22_0.06_250)] placeholder-[oklch(0.65_0.01_250)] focus:outline-none focus:border-[oklch(0.72_0.12_75)] transition-colors resize-none"
                               />
                             </div>
-                            <div ref={turnstileContainerRef} className="pt-2" />
-                            {!turnstileSiteKey && (
-                              <p className="text-xs text-red-600">
-                                {language === "en" ? "Security verification is not configured." : "ยังไม่ได้ตั้งค่าการยืนยันความปลอดภัย"}
-                              </p>
-                            )}
+                            <ContactTurnstile siteKey={turnstileSiteKey} language={language} onToken={setTurnstileToken} resetVersion={turnstileReset} />
+                            <p className="text-xs text-[oklch(0.38_0.005_250)]">
+                              {language === 'en' ? 'We use these details to respond to your enquiry and assess the requested service. ' : 'เราใช้ข้อมูลนี้เพื่อติดต่อกลับและประเมินบริการที่คุณสอบถาม '}
+                              <a href="#contact-privacy" className="underline">{language === 'en' ? 'How we use your information' : 'รายละเอียดการใช้ข้อมูล'}</a>
+                            </p>
                           </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
 
+                    {formError && <p role="alert" className="mt-4 text-sm text-red-700">{formError}</p>}
                     {/* Navigation */}
                     <div className="flex justify-between mt-8 pt-6 border-t border-[oklch(0.88_0.015_75)]">
                       {step > 1 ? (
-                        <Button variant="outline" onClick={() => setStep((s) => s - 1)}
+                        <Button variant="outline" disabled={isLoading} onClick={() => { setFormError(''); setStep(s => s - 1); }}
                           className="border-[oklch(0.88_0.015_75)] text-[oklch(0.52_0.02_250)] font-body font-medium text-sm">
                           <ArrowLeft size={14} className="mr-2" /> {language === "en" ? "Back" : "ย้อนกลับ"}
                         </Button>
                       ) : <div />}
                       {step < totalSteps ? (
-                        <Button onClick={() => setStep((s) => s + 1)}
+                        <Button onClick={nextStep}
                           className="bg-[oklch(0.22_0.06_250)] text-white hover:bg-[oklch(0.28_0.07_250)] font-body font-medium text-sm">
                           {language === "en" ? "Continue" : "ดำเนินการต่อ"} <ArrowRight size={14} className="ml-2" />
                         </Button>
                       ) : (
-                        <Button onClick={handleSubmit} disabled={isLoading}
+                        <Button onClick={handleSubmit} disabled={isLoading || !turnstileSiteKey || !turnstileToken}
                           className="bg-[oklch(0.72_0.12_75)] text-[oklch(0.22_0.06_250)] hover:bg-[oklch(0.82_0.09_75)] disabled:opacity-50 disabled:cursor-not-allowed font-body font-semibold text-sm">
-                          {isLoading ? <><Loader2 size={14} className="animate-spin mr-2" />Submitting...</> : <>{language === "en" ? "Submit Request" : "ส่งคำขอ"} <ArrowRight size={14} className="ml-2" /></>}
+                          {isLoading ? <><Loader2 size={14} className="animate-spin mr-2" />{language === "en" ? "Submitting..." : "กำลังส่ง..."}</> : <>{language === "en" ? "Submit Request" : "ส่งคำขอ"} <ArrowRight size={14} className="ml-2" /></>}
                         </Button>
                       )}
                     </div>
@@ -485,10 +459,10 @@ export default function Contact() {
                     </h3>
                     <p className="text-[oklch(0.52_0.02_250)] font-body mb-6">
                       {language === "en"
-                        ? `Thank you, ${form.name}. Our specialist will contact you at ${form.email} within 24 hours.`
-                        : `ขอบคุณ ${form.name} ผู้เชี่ยวชาญของเราจะติดต่อคุณที่ ${form.email} ภายใน 24 ชั่วโมง`}
+                        ? `Thank you, ${submittedContact.name}. Your request is saved. We will contact you at ${submittedContact.email}.`
+                        : `ขอบคุณ ${submittedContact.name} บันทึกคำขอแล้ว ทีมงานจะติดต่อกลับที่ ${submittedContact.email}`}
                     </p>
-                    <Button onClick={() => { setSubmitted(false); setStep(1); setForm(initialForm); }}
+                    <Button onClick={() => { setSubmitted(false); setStep(1); setForm(initialForm); setSubmittedContact({ name: '', email: '' }); submissionId.current = crypto.randomUUID(); }}
                       variant="outline" className="border-[oklch(0.22_0.06_250)] text-[oklch(0.22_0.06_250)] font-body font-medium text-sm">
                       {language === "en" ? "Submit Another Request" : "ส่งคำขออีกครั้ง"}
                     </Button>
@@ -496,6 +470,13 @@ export default function Contact() {
                 )}
               </div>
             </FadeUp>
+            <details id="contact-privacy" className="lg:col-span-3 text-sm text-[oklch(0.38_0.005_250)] border-t pt-5">
+              <summary className="cursor-pointer font-semibold">{language === 'en' ? 'Information use for contact enquiries' : 'การใช้ข้อมูลสำหรับคำขอติดต่อ'}</summary>
+              <p className="mt-2">{language === 'en'
+                ? 'Roter (Thailand) uses your organization details, contact details and project requirements to respond, assess the service and follow up on your enquiry. Please do not include sensitive personal information. Only provide information needed for your enquiry.'
+                : 'Roter (Thailand) ใช้ข้อมูลองค์กร ข้อมูลติดต่อ และความต้องการของโครงการ เพื่อตอบคำถาม ประเมินบริการ และติดตามคำขอของคุณ กรุณาไม่กรอกข้อมูลส่วนบุคคลที่มีความอ่อนไหว และให้เฉพาะข้อมูลที่จำเป็นต่อการสอบถาม'}</p>
+              <p className="mt-2">{language === 'en' ? 'To ask about, correct or request deletion of details submitted through this form, contact ' : 'หากต้องการสอบถาม แก้ไข หรือขอให้ลบข้อมูลที่ส่งผ่านแบบฟอร์มนี้ ติดต่อ '}<a className="underline" href="mailto:roter@roter.co.th">roter@roter.co.th</a></p>
+            </details>
           </div>
         </div>
       </section>

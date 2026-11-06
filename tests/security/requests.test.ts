@@ -174,7 +174,7 @@ describe('shared limiter and browser defenses', () => {
 });
 
 describe('submission cannot skip Turnstile verification', () => {
-  const payload = { organizationType: 'enterprise', organizationName: "Literal '; DROP TABLE leads; --", organizationSize: 'small', fullName: '<script>evil()</script>', email: 'test@example.invalid', turnstileToken: 'synthetic-token' };
+  const payload = { organizationType: 'enterprise', organizationName: "Literal '; DROP TABLE leads; --", organizationSize: 'small', fullName: '<script>evil()</script>', email: 'test@example.invalid', turnstileToken: 'synthetic-token', submissionId: 'dbd45aad-cf22-4c90-927e-d2dfabecfe56' };
   it.each([
     { success: false, hostname: 'preview.example' },
     { success: true, hostname: 'evil.example' },
@@ -185,7 +185,7 @@ describe('submission cannot skip Turnstile verification', () => {
     expect(env.statements.some(s => s.sql.includes('INSERT INTO leads'))).toBe(false);
   });
   it('stores text only as prepared parameters after verified hostname', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json({ success: true, hostname: 'preview.example' })));
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json({ success: true, hostname: 'preview.example', action: 'contact' })));
     const env = environment(); const response = await handle(request('/api/leads', { method: 'POST', body: JSON.stringify(payload) }), env);
     expect(response.status).toBe(201); const insert = env.statements.find(s => s.sql.includes('INSERT INTO leads'))!;
     expect(insert.sql).not.toContain('DROP TABLE'); expect(insert.values).toContain(payload.organizationName); expect(insert.values).toContain(payload.fullName);

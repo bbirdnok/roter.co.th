@@ -63,6 +63,10 @@ export default function AdminLeads() {
   };
 
   const orgSizeLabels: Record<string, { en: string; th: string }> = {
+    small: { en: '< 100', th: '< 100' },
+    medium: { en: '100–500', th: '100–500' },
+    large: { en: '500–5,000', th: '500–5,000' },
+    enterprise: { en: '> 5,000', th: '> 5,000' },
     "<100": { en: "< 100", th: "< 100" },
     "100-500": { en: "100–500", th: "100–500" },
     "500-5000": { en: "500–5,000", th: "500–5,000" },
@@ -163,6 +167,7 @@ export default function AdminLeads() {
                             {language === "en" ? "Contact Information" : "ข้อมูลติดต่อ"}
                           </h4>
                           <div className="space-y-2 text-sm">
+                            {lead.jobTitle && <p>{language === 'en' ? 'Job title: ' : 'ตำแหน่งงาน: '}{lead.jobTitle}</p>}
                             <div className="flex items-center gap-2">
                               <Mail size={14} className="text-[oklch(0.72_0.12_75)]" />
                               <a href={`mailto:${lead.email}`} className="text-blue-600 hover:underline">
@@ -199,6 +204,12 @@ export default function AdminLeads() {
                       </div>
 
                       {/* Message */}
+                      <div className="mb-6 text-sm space-y-2">
+                        <h4 className="font-semibold">{language === 'en' ? 'Project requirements' : 'ความต้องการของโครงการ'}</h4>
+                        <p>{language === 'en' ? 'Service: ' : 'บริการ: '}{lead.serviceInterest || '—'}</p>
+                        <p>{language === 'en' ? 'Document volume: ' : 'ปริมาณเอกสาร: '}{({ small: '< 10,000', medium: '10,000–100,000', large: '100,000–1,000,000', massive: '> 1,000,000' } as Record<string, string>)[lead.documentVolume || ''] || '—'}</p>
+                        <p>{language === 'en' ? 'Timeline: ' : 'กรอบเวลา: '}{({ urgent: language === 'en' ? '< 1 month' : '< 1 เดือน', soon: language === 'en' ? '1–3 months' : '1–3 เดือน', planned: language === 'en' ? '3–6 months' : '3–6 เดือน', future: language === 'en' ? '6+ months' : '6+ เดือน' } as Record<string, string>)[lead.timeline || ''] || '—'}</p>
+                      </div>
                       {lead.message && (
                         <div className="mb-6">
                           <h4 className="font-semibold text-[oklch(0.22_0.06_250)] mb-2">

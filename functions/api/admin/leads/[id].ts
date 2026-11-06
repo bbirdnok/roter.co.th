@@ -27,7 +27,8 @@ export async function onRequestPatch(context: Context) {
 
   const lead = await context.env.DB.prepare(
     `SELECT id, organization_type AS organizationType, organization_name AS organizationName,
-      organization_size AS organizationSize, full_name AS fullName, email, phone,
+      organization_size AS organizationSize, full_name AS fullName, job_title AS jobTitle,
+      document_volume AS documentVolume, timeline, email, phone,
       service_interest AS serviceInterest, message, status,
       created_at AS createdAt, updated_at AS updatedAt
      FROM leads WHERE id = ?`,

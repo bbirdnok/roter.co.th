@@ -22,6 +22,9 @@ interface Context {
 const MAX_MESSAGE_LENGTH = 4_000;
 const allowedOrgTypes = new Set(["government", "finance", "healthcare", "enterprise", "education", "other"]);
 const allowedOrgSizes = new Set(["small", "medium", "large", "enterprise"]);
+const allowedServices = new Set(['scanning', 'edms', 'microfilm', 'ancient', 'workflow', 'consulting', 'products']);
+const allowedVolumes = new Set(['small', 'medium', 'large', 'massive']);
+const allowedTimelines = new Set(['urgent', 'soon', 'planned', 'future']);
 
 async function verifyTurnstile(token: string, secret: string, hostname: string, remoteIp?: string) {
   if (!secret) throw new HttpError(503, 'Security verification is unavailable');
@@ -36,8 +39,8 @@ async function verifyTurnstile(token: string, secret: string, hostname: string, 
     signal: AbortSignal.timeout(8000),
   });
   if (!response.ok) throw new HttpError(503, 'Security verification is unavailable');
-  const result = (await response.json()) as { success?: boolean; hostname?: string };
-  return result.success === true && result.hostname === hostname;
+  const result = (await response.json()) as { success?: boolean; hostname?: string; action?: string };
+  return result.success === true && result.hostname === hostname && result.action === 'contact';
 }
 
 export async function onRequestPost(context: Context) {
@@ -55,7 +58,14 @@ export async function onRequestPost(context: Context) {
   const phone = textField(payload.phone, 32) || null;
   const serviceInterest = textField(payload.serviceInterest, 255) || null;
   const message = textField(payload.message, MAX_MESSAGE_LENGTH) || null;
+  const jobTitle = textField(payload.jobTitle, 120) || null;
+  const documentVolume = textField(payload.documentVolume, 32) || null;
+  const timeline = textField(payload.timeline, 32) || null;
+  const submissionId = textField(payload.submissionId, 36, true);
   const turnstileToken = textField(payload.turnstileToken, 2048, true);
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(submissionId)) {
+    throw new HttpError(400, 'Invalid submission identifier');
+  }
 
   if (!organizationName || !fullName || !email || !turnstileToken) {
     return json({ error: "Missing required fields" }, { status: 400 });
@@ -66,6 +76,26 @@ export async function onRequestPost(context: Context) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return json({ error: "Invalid email address" }, { status: 400 });
   }
+  if ((serviceInterest && !allowedServices.has(serviceInterest)) ||
+      (documentVolume && !allowedVolumes.has(documentVolume)) ||
+      (timeline && !allowedTimelines.has(timeline))) throw new HttpError(400, 'Invalid project details');
+  if (!context.env.TURNSTILE_SECRET_KEY) throw new HttpError(503, 'Security verification is unavailable');
+
+  const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify([
+    organizationType, organizationName, organizationSize, fullName, email, phone, serviceInterest,
+    message, jobTitle, documentVolume, timeline,
+  ])));
+  const contentHash = Array.from(new Uint8Array(bytes), b => b.toString(16).padStart(2, '0')).join('');
+  const findExisting = () => context.env.DB.prepare('SELECT id, content_hash AS contentHash FROM leads WHERE submission_key = ?')
+    .bind(submissionId).first<{ id: number; contentHash: string }>();
+  const acknowledge = (existing: { id: number; contentHash: string }) => {
+    if (existing.contentHash !== contentHash) throw new HttpError(409, 'Submission identifier already used');
+    return json({ id: existing.id });
+  };
+  // A retry can acknowledge only the identical submission already verified and committed.
+  // It cannot create a new lead without a fresh successful Siteverify response.
+  const existing = await findExisting();
+  if (existing?.id) return acknowledge(existing);
 
   const turnstileOk = await verifyTurnstile(
     turnstileToken,
@@ -78,20 +108,32 @@ export async function onRequestPost(context: Context) {
   const result = await context.env.DB.prepare(
     `INSERT INTO leads (
       organization_type, organization_name, organization_size, full_name,
-      email, phone, service_interest, message, status, created_at, updated_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'new', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+      email, phone, service_interest, message, job_title, document_volume, timeline,
+      submission_key, content_hash, status, created_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'new', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    ON CONFLICT(submission_key) DO NOTHING`,
   )
-    .bind(organizationType, organizationName, organizationSize, fullName, email, phone, serviceInterest, message)
+    .bind(organizationType, organizationName, organizationSize, fullName, email, phone, serviceInterest, message,
+      jobTitle, documentVolume, timeline, submissionId, contentHash)
     .run();
 
   const leadId = Number(result.meta?.last_row_id || 0);
+  if (!result.meta?.changes) {
+    const concurrent = await findExisting();
+    if (concurrent?.id) return acknowledge(concurrent);
+    throw new HttpError(503, 'Submission could not be confirmed');
+  }
+  if (!Number.isSafeInteger(leadId) || leadId < 1) throw new HttpError(503, 'Submission could not be confirmed');
   if (context.env.EMAIL && context.env.LEAD_NOTIFY_EMAIL && context.env.LEAD_EMAIL_FROM) {
     const detailRows = [
       ["Organization", organizationName],
       ["Name", fullName],
+      ["Job title", jobTitle || '—'],
       ["Email", email],
       ["Phone", phone || "—"],
       ["Service", serviceInterest || "—"],
+      ["Document volume", documentVolume || '—'],
+      ["Timeline", timeline || '—'],
       ["Message", message || "—"],
     ]
       .map(([label, value]) => `<tr><td style="padding:4px 12px 4px 0"><strong>${label}</strong></td><td>${escapeHtml(String(value))}</td></tr>`)

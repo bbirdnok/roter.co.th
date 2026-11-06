@@ -6,6 +6,9 @@ export type Lead = {
   organizationName: string;
   organizationSize: string;
   fullName: string;
+  jobTitle: string | null;
+  documentVolume: string | null;
+  timeline: string | null;
   email: string;
   phone: string | null;
   serviceInterest: string | null;
@@ -17,6 +20,7 @@ export type Lead = {
 
 export type CreateLeadInput = Omit<Lead, "id" | "status" | "createdAt" | "updatedAt"> & {
   turnstileToken: string;
+  submissionId: string;
 };
 
 type ApiErrorPayload = { error?: string };
@@ -31,10 +35,15 @@ export async function createLead(input: CreateLeadInput) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
+    signal: AbortSignal.timeout(20_000),
   });
 
-  if (!response.ok) throw new Error(await readError(response));
+  if (!response.ok) throw new LeadSubmissionError(response.status, await readError(response));
   return (await response.json()) as { id: number };
+}
+
+export class LeadSubmissionError extends Error {
+  constructor(public status: number, message: string) { super(message); }
 }
 
 export async function listLeads(status?: LeadStatus) {
